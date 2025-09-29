@@ -1,0 +1,31 @@
+name: Release to PyPI (trusted publishing)
+
+on:
+  push:
+    tags:
+      - "v0.1.0"                
+
+permissions:
+  contents: read             
+  id-token: write           
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build wheel and sdist
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+
+      # Publish using Trusted Publishing (no username/password)
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.10.2
+
