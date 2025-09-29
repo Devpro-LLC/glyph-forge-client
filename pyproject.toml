@@ -1,29 +1,49 @@
 [build-system]
-requires = ["hatchling>=1.20"]
+requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
 [project]
 name = "glyph-forge"
-version = "0.1.0"
-description = "A minimal glyph forge package"
+version = "0.0.1"
+authors = [{ name = "Devpro LLC" }]
+description = "Pip installable client for Glyph Forge API"
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "Glyph Client License Agreement" }
-authors = [{ name = "Devpro LLC" }]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3",
+  "License :: Other/Proprietary License",
+  "Operating System :: OS Independent",
 ]
+license = { text = "Glyph Client License Agreement" }
+license-files = ["LICEN[CS]E*"]
 
 [project.urls]
-Homepage = "https://github.com/example/glyph-forge"
-Repository = "https://github.com/example/glyph-forge"
+Homepage = "https://www.glyphapi.ai/"
+Issues = "https://github.com/Devpro-LLC/glyph-forge-client/issues"
+Source = "https://github.com/Devpro-LLC/glyph-forge-client"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/glyph_forge"]
+packages = ["glyph_forge"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/glyph_forge", "README.md", "LICENSE", "pyproject.toml"]
+
+[tool.hatch.build.sources]
+glyph_forge = "src/glyph_forge"
+
+[project.scripts]
+glyph = "glyph_forge.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.hatch.version]
+path = "src/glyph_forge/_version.py"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
