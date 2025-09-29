@@ -1,6 +1,3 @@
-# Glyph Forge
-
-A minimal glyph forge package.
 
 ## Installation
 
@@ -8,10 +5,3 @@ A minimal glyph forge package.
 pip install glyph-forge
 ```
 
-## Usage
-
-```python
-from glyph_forge import hello
-
-print(hello())
-```
