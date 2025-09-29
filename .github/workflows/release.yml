@@ -1,18 +1,70 @@
-name: Release to PyPI (trusted publishing)
+name: Release (auto on _version change)
 
 on:
   push:
-    tags:
-      - "v*"          
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:
   contents: read
   id-token: write
 
+env:
+  VERSION_FILE: src/glyph_forge/_version.py
+
 jobs:
-  build-and-publish:
+  detect-version-change:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+      version: ${{ steps.parse.outputs.version }}
+      is_prerelease: ${{ steps.parse.outputs.is_prerelease }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: check
+        run: |
+          set -e
+          if git show ${{ github.sha }} --name-only --pretty="" | grep -q "^${VERSION_FILE}$"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            BEFORE="${{ github.event.before }}"
+            if [ -n "$BEFORE" ] && git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -q "^${VERSION_FILE}$"; then
+              echo "changed=true" >> $GITHUB_OUTPUT
+            else
+              echo "changed=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - id: parse
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          set -e
+          VER=$(python - <<'PY'
+          import re, sys, pathlib
+          p = pathlib.Path("${{ env.VERSION_FILE }}")
+          m = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', p.read_text())
+          if not m: 
+              sys.exit("Could not find __version__ in version file")
+          print(m.group(1))
+          PY
+          )
+          echo "version=$VER" >> $GITHUB_OUTPUT
+          if echo "$VER" | grep -Eq '(a|b|rc|dev)'; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+          echo "Detected version: $VER"
+
+  build:
+    needs: detect-version-change
+    if: needs.detect-version-change.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      dist-path: dist
     steps:
       - uses: actions/checkout@v4
 
@@ -24,16 +76,44 @@ jobs:
       - name: Build wheel and sdist
         run: |
           python -m pip install --upgrade pip build
+          rm -rf dist build *.egg-info
           python -m build
+          python -m pip install --upgrade twine
+          python -m twine check dist/*
+
+      - name: Upload dist as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/*
+
+  publish-testpypi:
+    needs: [detect-version-change, build]
+    if: needs.detect-version-change.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       - name: Publish to TestPyPI
-        if: contains(github.ref, 'refs/tags/')
         uses: pypa/gh-action-pypi-publish@v1.12.3
         with:
           repository-url: https://test.pypi.org/legacy/
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
-      - name: Publish to PyPI
+  publish-pypi:
+    needs: [detect-version-change, build]
+    if: needs.detect-version-change.outputs.changed == 'true' && needs.detect-version-change.outputs.is_prerelease == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Publish to PyPI (Trusted Publishing)
         uses: pypa/gh-action-pypi-publish@v1.12.3
         with:
           print-hash: true

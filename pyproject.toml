@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "glyph-forge"
-version = "0.0.1"
+dynamic = ["version"]
 authors = [{ name = "Devpro LLC" }]
 description = "Pip installable client for Glyph Forge API"
 readme = "README.md"
