@@ -3,11 +3,12 @@ name: Release to PyPI (trusted publishing)
 on:
   push:
     tags:
-      - "v0.1.0"                
+      - "v*"          
+  workflow_dispatch: {}
 
 permissions:
-  contents: read             
-  id-token: write           
+  contents: read
+  id-token: write
 
 jobs:
   build-and-publish:
@@ -25,7 +26,7 @@ jobs:
           python -m pip install --upgrade pip build
           python -m build
 
-      # Publish using Trusted Publishing (no username/password)
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.10.2
-
+        uses: pypa/gh-action-pypi-publish@v1.12.3
+        with:
+          print-hash: true
