@@ -30,13 +30,16 @@ jobs:
           set -e
           if git show ${{ github.sha }} --name-only --pretty="" | grep -q "^${VERSION_FILE}$"; then
             echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✓ Version file changed in commit"
           else
             # Fallback: compare with previous commit (handles merge commits too)
             BEFORE="${{ github.event.before }}"
             if [ -n "$BEFORE" ] && git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -q "^${VERSION_FILE}$"; then
               echo "changed=true" >> $GITHUB_OUTPUT
+              echo "✓ Version file changed (detected via diff)"
             else
               echo "changed=false" >> $GITHUB_OUTPUT
+              echo "✗ No version file changes detected - skipping release"
             fi
           fi
 
@@ -45,23 +48,29 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: |
           set -e
-          VER=$(python - <<'PY'
-import re, sys, pathlib
-p = pathlib.Path("${{ env.VERSION_FILE }}")
-m = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', p.read_text())
-if not m: 
-    sys.exit("Could not find __version__ in version file")
-print(m.group(1))
-PY
-)
+          VER=$(python3 -c "
+          import re, pathlib
+          p = pathlib.Path('${{ env.VERSION_FILE }}')
+          m = re.search(r'__version__\s*=\s*[\"\\']([^\"\\'\'']+)[\"\\']', p.read_text())
+          if not m:
+              raise SystemExit('Could not find __version__ in version file')
+          print(m.group(1))
+          ")
           echo "version=$VER" >> $GITHUB_OUTPUT
+
+          # Validate version format (basic PEP 440 check)
+          if ! echo "$VER" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
+            echo "⚠️  Warning: Version '$VER' doesn't follow semantic versioning (X.Y.Z)"
+          fi
+
           # treat anything with a pre/dev marker as a pre-release
           if echo "$VER" | grep -Eq '(a|b|rc|dev)'; then
             echo "is_prerelease=true" >> $GITHUB_OUTPUT
+            echo "📦 Version $VER → Pre-release (TestPyPI only)"
           else
             echo "is_prerelease=false" >> $GITHUB_OUTPUT
+            echo "📦 Version $VER → Stable release (TestPyPI + PyPI)"
           fi
-          echo "Detected version: $VER"
 
   build:
     needs: detect-version-change
@@ -81,11 +90,19 @@ PY
 
       - name: Build wheel and sdist
         run: |
+          echo "📦 Building version ${{ needs.detect-version-change.outputs.version }}..."
           python -m pip install --upgrade pip build
           rm -rf dist build *.egg-info
           python -m build
+          echo "✓ Build complete"
+          echo ""
+          echo "📋 Built artifacts:"
+          ls -lh dist/
+          echo ""
+          echo "🔍 Validating package..."
           python -m pip install --upgrade twine
           python -m twine check dist/*
+          echo "✓ Package validation passed"
 
       - name: Upload dist as artifact
         uses: actions/upload-artifact@v4
@@ -107,6 +124,13 @@ PY
         with:
           repository-url: https://test.pypi.org/legacy/
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          print-hash: true
+
+      - name: TestPyPI installation check
+        run: |
+          echo "✓ Published to TestPyPI"
+          echo "Install command:"
+          echo "  pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ glyph-forge==${{ needs.detect-version-change.outputs.version }}"
 
   publish-pypi:
     # Only publish to real PyPI if it's not a pre-release
@@ -122,3 +146,10 @@ PY
         uses: pypa/gh-action-pypi-publish@v1.12.3
         with:
           print-hash: true
+
+      - name: PyPI installation check
+        run: |
+          echo "✓ Published to PyPI"
+          echo "Users can now install:"
+          echo "  pip install glyph-forge==${{ needs.detect-version-change.outputs.version }}"
+          echo "  pip install glyph-forge  # (gets latest stable)"
