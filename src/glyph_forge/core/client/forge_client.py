@@ -46,7 +46,7 @@ class ForgeClient:
         >>> schema = client.build_schema_from_docx(ws, docx_path="sample.docx")
     """
 
-    DEFAULT_BASE_URL = "https://api.glyphapi.ai"
+    DEFAULT_BASE_URL = "https://dev.glyphapi.ai"
 
     def __init__(self, base_url: Optional[str] = None, *, timeout: float = 30.0):
         """
