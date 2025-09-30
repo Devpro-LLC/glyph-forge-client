@@ -127,3 +127,6 @@ cython_debug/
 .vscode/
 
 notes.txt
+
+# Copied workspace files from submodule (generated at build time)
+src/glyph_forge/core/workspace/

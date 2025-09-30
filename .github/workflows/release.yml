@@ -2,12 +2,12 @@ name: Release (auto on _version change)
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]        # <-- change if your default branch is different
   workflow_dispatch: {}
 
 permissions:
   contents: read
-  id-token: write
+  id-token: write             # required for PyPI Trusted Publishing
 
 env:
   VERSION_FILE: src/glyph_forge/_version.py
@@ -24,12 +24,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Did the version file change in this push?
       - id: check
         run: |
           set -e
           if git show ${{ github.sha }} --name-only --pretty="" | grep -q "^${VERSION_FILE}$"; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
+            # Fallback: compare with previous commit (handles merge commits too)
             BEFORE="${{ github.event.before }}"
             if [ -n "$BEFORE" ] && git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -q "^${VERSION_FILE}$"; then
               echo "changed=true" >> $GITHUB_OUTPUT
@@ -38,20 +40,22 @@ jobs:
             fi
           fi
 
+      # Parse __version__ = "X.Y.Z[..]" from the file
       - id: parse
         if: steps.check.outputs.changed == 'true'
         run: |
           set -e
           VER=$(python - <<'PY'
-          import re, sys, pathlib
-          p = pathlib.Path("${{ env.VERSION_FILE }}")
-          m = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', p.read_text())
-          if not m: 
-              sys.exit("Could not find __version__ in version file")
-          print(m.group(1))
-          PY
-          )
+import re, sys, pathlib
+p = pathlib.Path("${{ env.VERSION_FILE }}")
+m = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', p.read_text())
+if not m: 
+    sys.exit("Could not find __version__ in version file")
+print(m.group(1))
+PY
+)
           echo "version=$VER" >> $GITHUB_OUTPUT
+          # treat anything with a pre/dev marker as a pre-release
           if echo "$VER" | grep -Eq '(a|b|rc|dev)'; then
             echo "is_prerelease=true" >> $GITHUB_OUTPUT
           else
@@ -67,6 +71,8 @@ jobs:
       dist-path: dist
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -96,7 +102,6 @@ jobs:
         with:
           name: dist
           path: dist
-
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@v1.12.3
         with:
@@ -104,6 +109,7 @@ jobs:
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   publish-pypi:
+    # Only publish to real PyPI if it's not a pre-release
     needs: [detect-version-change, build]
     if: needs.detect-version-change.outputs.changed == 'true' && needs.detect-version-change.outputs.is_prerelease == 'false'
     runs-on: ubuntu-latest
@@ -112,7 +118,6 @@ jobs:
         with:
           name: dist
           path: dist
-
       - name: Publish to PyPI (Trusted Publishing)
         uses: pypa/gh-action-pypi-publish@v1.12.3
         with:
