@@ -1,0 +1,3 @@
+[submodule "src/glyph_forge/core/workspace"]
+	path = src/glyph_forge/core/workspace
+	url = https://github.com/Devpro-LLC/glyph-sdk.git
