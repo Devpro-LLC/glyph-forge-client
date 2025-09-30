@@ -15,12 +15,6 @@ requires-python = ">=3.9"
 dependencies = [
   "httpx>=0.25.0",
 ]
-
-[project.optional-dependencies]
-test = [
-  "pytest>=7.0.0",
-  "pytest-cov>=4.0.0",
-]
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: Other/Proprietary License",
@@ -29,6 +23,12 @@ classifiers = [
 license = { text = "Glyph Client License Agreement" }
 license-files = ["LICEN[CS]E*"]
 
+[project.optional-dependencies]
+test = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+]
+
 [project.urls]
 Homepage = "https://www.glyphapi.ai/"
 Issues = "https://github.com/Devpro-LLC/glyph-forge-client/issues"
@@ -36,6 +36,9 @@ Source = "https://github.com/Devpro-LLC/glyph-forge-client"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/glyph_forge"]
+artifacts = [
+  "src/glyph_forge/core/workspace/**/*.py",
+]
 
 [tool.hatch.build.targets.sdist]
 include = [
