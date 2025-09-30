@@ -44,6 +44,103 @@ def copy_workspace_module():
     copied_files = list(destination.rglob("*.py"))
     print(f"Successfully copied {len(copied_files)} Python files")
 
+    # Fix imports: glyph.core.workspace -> glyph_forge.core.workspace
+    print(f"Fixing imports in copied files...")
+    import_count = 0
+    for py_file in copied_files:
+        content = py_file.read_text(encoding='utf-8')
+        new_content = content.replace(
+            'from glyph.core.workspace',
+            'from glyph_forge.core.workspace'
+        ).replace(
+            'import glyph.core.workspace',
+            'import glyph_forge.core.workspace'
+        )
+        if new_content != content:
+            py_file.write_text(new_content, encoding='utf-8')
+            import_count += 1
+
+    print(f"Fixed imports in {import_count} files")
+
+    # Fix FilesystemWorkspace to call parent __init__ properly
+    fs_py = destination / "storage" / "fs.py"
+    if fs_py.exists():
+        print(f"Patching FilesystemWorkspace in storage/fs.py...")
+        content = fs_py.read_text(encoding='utf-8')
+
+        # Find and replace the __init__ method
+        old_init = '''        os.makedirs(root_dir, exist_ok=True)
+        self.base_root = root_dir
+
+        # run id
+        self.run_id = (
+            datetime.now().strftime("%Y%m%dT%H%M%S") + "_" + str(uuid.uuid4())[:8]
+            if use_uuid else "default"
+        )
+
+        self.root_dir = os.path.join(self.base_root, self.run_id)
+        os.makedirs(self.root_dir, exist_ok=True)
+
+        self.paths = {
+            "input_docx":      os.path.join(self.root_dir, "input", "docx"),
+            "input_plaintext": os.path.join(self.root_dir, "input", "plaintext"),
+            "input_unzipped":  os.path.join(self.root_dir, "input", "unzipped"),
+            "output_configs":  os.path.join(self.root_dir, "output", "configs"),
+            "output_docx":     os.path.join(self.root_dir, "output", "docx"),
+        }
+        if custom_paths:
+            self.paths.update(custom_paths)
+
+        for path in self.paths.values():
+            # Make dirs only (skip files)
+            if os.path.splitext(path)[1] == "":
+                os.makedirs(path, exist_ok=True)'''
+
+        new_init = '''        os.makedirs(root_dir, exist_ok=True)
+        base_root = root_dir
+
+        # run id
+        run_id = (
+            datetime.now().strftime("%Y%m%dT%H%M%S") + "_" + str(uuid.uuid4())[:8]
+            if use_uuid else "default"
+        )
+
+        root_dir_path = os.path.join(base_root, run_id)
+        os.makedirs(root_dir_path, exist_ok=True)
+
+        paths = {
+            "input_docx":      os.path.join(root_dir_path, "input", "docx"),
+            "input_plaintext": os.path.join(root_dir_path, "input", "plaintext"),
+            "input_unzipped":  os.path.join(root_dir_path, "input", "unzipped"),
+            "output_configs":  os.path.join(root_dir_path, "output", "configs"),
+            "output_docx":     os.path.join(root_dir_path, "output", "docx"),
+        }
+        if custom_paths:
+            paths.update(custom_paths)
+
+        # Initialize parent class with all required parameters
+        super().__init__(
+            base_root=base_root,
+            root_dir=root_dir_path,
+            run_id=run_id,
+            paths=paths,
+        )
+
+        # Create directories
+        for path in self._paths.values():
+            # Make dirs only (skip files)
+            if os.path.splitext(path)[1] == "":
+                os.makedirs(path, exist_ok=True)'''
+
+        # Fix method signatures to use self._paths
+        content = content.replace(old_init, new_init)
+        content = content.replace('os.path.join(self.paths[key]', 'os.path.join(self._paths[key]')
+        content = content.replace('for path in self.paths.values():', 'for path in self._paths.values():')
+        content = content.replace('def directory(self, key: str) -> str:\n        return self.paths[key]', '')
+
+        fs_py.write_text(content, encoding='utf-8')
+        print(f"✓ Patched FilesystemWorkspace")
+
     return True
 
 
