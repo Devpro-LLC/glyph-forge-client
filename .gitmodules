@@ -2,3 +2,6 @@
 	path = sdk
 	url = https://github.com/Devpro-LLC/glyph-sdk.git
 	branch = dev
+[submodule "glyph-forge-api"]
+	path = glyph-forge-api
+	url = https://github.com/Devpro-LLC/glyph-forge-api.git
