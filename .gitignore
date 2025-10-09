@@ -130,3 +130,7 @@ notes.txt
 
 # Copied workspace files from submodule (generated at build time)
 # src/glyph_forge/core/workspace/
+
+# Example outputs (generated artifacts)
+examples/outputs/
+.DS_Store
