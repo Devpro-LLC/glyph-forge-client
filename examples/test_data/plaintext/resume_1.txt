@@ -1,0 +1,39 @@
+John Doe
+Phone: (555) 555-5555
+Email: john.doe@example.com
+Linkedin: https://www.linkedin.com/in/john-doe
+Jr Software Engineer I
+Seeking a Software Engineer position to leverage over 4 years of diverse software engineering experience gained across diverse sectors. Eager to continue a demonstrated track record of success in developing and maintaining top-tier software solutions. Armed with strong communication skills, technical expertise, and an innovative mindset, I am committed to contributing effectively to impactful projects at 
+Education
+•	Bachelor of Science in Software Engineering
+Technical Skills
+•	Proficient in frontend/backend frameworks development
+•	Extensive experience in developing backend services for API integrations
+•	Strong understanding of cloud technologies and software engineering principles
+•	Excellent communication skills with the ability to collaborate across diverse teams
+•	Demonstrated ability to innovate and problem-solve effectively
+•	Proficient in HTTP and APIs (Rest based and others)
+•	Deep comprehension of Large Language Model (LLM) API systems and application development experience
+Professional Experience
+Company 
+Job Title
+City, State United States
+•	Applied theoretical knowledge to real-world projects, gaining practical experience in developing software solutions.
+•	Collaborated with mentors and team members to contribute to the successful completion of project objectives.
+•	Developed suggested requirements for a proprietary data analytics solution, enhancing operational efficiency and data processing capabilities.
+Company 2
+Job Title
+City, State United States
+•	Intern at Devpro LLC, a dynamic software company specializing in creating innovative AI solutions for various sectors, including job market analysis and military applications.
+•	Tech Conference Workshop Speaker (Aug 2023) - Presented a workshop titled "Empowering Career Exploration and Decision Making with Personalized AI" at the BDPA National Tech Conference. Showcased technical expertise and communication skills by delivering a comprehensive session on the potential of AI in guiding career choices and enhancing professional growth.
+Company 3
+Job Title
+City, State United States
+•	Designed strategies for HIPPA-compliant databases, data cloud systems, and enterprise API systems.
+•	Outlined standards for database operations, programming, query processes, and security.
+•	Modeled, designed, and constructed databases and cloud networks. 
+•	Created and optimize data models for cloud infrastructure and workflow. 
+•	Integrate new systems with existing structures and refine system performance and functionality.
+Certifications
+•	Certification 1
+•	Certification 2 
