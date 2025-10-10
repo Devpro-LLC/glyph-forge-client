@@ -48,14 +48,15 @@ jobs:
         if: steps.check.outputs.changed == 'true'
         run: |
           set -e
-          VER=$(python3 -c "
+          VER=$(python3 <<'EOF'
           import re, pathlib
           p = pathlib.Path('${{ env.VERSION_FILE }}')
-          m = re.search(r'__version__\s*=\s*[\"'\''](.+?)[\"'\'']', p.read_text())
+          m = re.search(r'__version__\s*=\s*["\'](.+?)["\']', p.read_text())
           if not m:
               raise SystemExit('Could not find __version__ in version file')
           print(m.group(1))
-          ")
+          EOF
+          )
           echo "version=$VER" >> $GITHUB_OUTPUT
 
           # Validate version format (basic PEP 440 check)
