@@ -80,10 +80,19 @@ jobs:
     outputs:
       dist-path: dist
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DEVPRO_GH_APP_ID }}
+          private-key: ${{ secrets.DEVPRO_GH_APP_PRIVATE_KEY }}
+          owner: Devpro-LLC
+          repositories: glyph-forge-client,glyph-forge-api,glyph-sdk
+
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-          token: ${{ secrets.SUBMODULES_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
