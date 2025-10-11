@@ -137,6 +137,7 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
           attestations: false
+          verbose: true
           print-hash: true
 
       - name: TestPyPI installation check
