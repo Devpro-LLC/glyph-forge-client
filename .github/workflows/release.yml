@@ -125,6 +125,8 @@ jobs:
     needs: [detect-version-change, build]
     if: needs.detect-version-change.outputs.changed == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for Trusted Publishing
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -134,7 +136,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.12.3
         with:
           repository-url: https://test.pypi.org/legacy/
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           print-hash: true
 
       - name: TestPyPI installation check
