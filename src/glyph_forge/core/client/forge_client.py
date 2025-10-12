@@ -663,6 +663,90 @@ class ForgeClient:
         return result_dict
 
     # -------------------------------------------------------------------------
+    # Schema Compression
+    # -------------------------------------------------------------------------
+
+    def compress_schema(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        schema: Dict[str, Any],
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Compress a schema by deduplicating redundant pattern descriptors.
+
+        Many schemas have redundant pattern descriptor types (e.g., "H-SHORT" appearing
+        multiple times with the same styles and properties). This endpoint compresses
+        the schema by grouping pattern descriptors by type and selecting the highest
+        scoring descriptor for each type.
+
+        Endpoint: POST /schema/compress
+
+        Args:
+            ws: Workspace instance
+            schema: Schema dict to compress (from build_schema_from_docx or loaded JSON)
+            save_as: Optional name to save compressed schema JSON (without .json extension)
+
+        Returns:
+            Dict containing:
+                - compressed_schema: The compressed schema with deduplicated pattern descriptors
+                - stats: Compression statistics (original_count, compressed_count, reduction, etc.)
+
+        Raises:
+            ForgeClientIOError: Network/connection errors
+            ForgeClientHTTPError: API returned non-2xx status (401, 403, 429)
+            ForgeClientError: Failed to compress schema or save to workspace
+
+        Example:
+            >>> result = client.compress_schema(
+            ...     ws,
+            ...     schema=schema,
+            ...     save_as="compressed_schema"
+            ... )
+            >>> print(f"Reduced from {result['stats']['original_count']} to {result['stats']['compressed_count']}")
+            >>> compressed_schema = result['compressed_schema']
+        """
+        logger.info(f"Compressing schema, save_as={save_as}")
+
+        response = self._make_request(
+            "POST",
+            "/schema/compress",
+            json_data={"schema": schema},
+        )
+
+        compressed_schema = response.get("compressed_schema")
+        stats = response.get("stats", {})
+
+        if not compressed_schema:
+            raise ForgeClientError(
+                "Missing 'compressed_schema' in API response",
+                endpoint="/schema/compress",
+            )
+
+        # Save compressed schema to workspace if requested
+        if save_as:
+            try:
+                schema_path = ws.save_json("output_configs", save_as, compressed_schema)
+                logger.info(f"Compressed schema saved to {schema_path}")
+            except Exception as e:
+                raise ForgeClientError(
+                    f"Failed to save compressed schema to workspace: {e}",
+                    endpoint="/schema/compress",
+                ) from e
+
+        logger.info(
+            f"Schema compression completed: {stats.get('original_count', 'N/A')} -> "
+            f"{stats.get('compressed_count', 'N/A')} pattern descriptors "
+            f"({stats.get('reduction_percentage', 0):.1f}% reduction)"
+        )
+
+        return {
+            "compressed_schema": compressed_schema,
+            "stats": stats,
+        }
+
+    # -------------------------------------------------------------------------
     # Plaintext Intake (JSON body)
     # -------------------------------------------------------------------------
 
