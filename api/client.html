@@ -1,0 +1,1142 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Workspace API" href="workspace.html"><link rel="prev" title="Workspace Management" href="../user_guide/workspace.html">
+        <link rel="prefetch" href="../_static/logo-light.png" as="image">
+        <link rel="prefetch" href="../_static/logo-dark.png" as="image">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>ForgeClient API - Glyph Forge Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=a7100ea0" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2962ff;
+  --color-brand-content: #2962ff;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #448aff;
+  --color-brand-content: #448aff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #448aff;
+  --color-brand-content: #448aff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Glyph Forge Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../_static/logo-light.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../_static/logo-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Glyph Forge Documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/workspace.html">Workspace Management</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ForgeClient API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workspace.html">Workspace API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/Devpro-LLC/glyph-forge-client/blob/main/docs_sphinx/source/api/client.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/Devpro-LLC/glyph-forge-client/edit/main/docs_sphinx/source/api/client.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="forgeclient-api">
+<h1>ForgeClient API<a class="headerlink" href="#forgeclient-api" title="Link to this heading">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">ForgeClient</span></code> class is the main interface for interacting with the Glyph Forge API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">glyph_forge.core.client.forge_client.</span></span><span class="sig-name descname"><span class="pre">ForgeClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Synchronous HTTP client for Glyph Forge API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – API key for authentication (required). Format: “<a href="#id9"><span class="problematic" id="id10">gf_live_</span></a>…” or “<a href="#id11"><span class="problematic" id="id12">gf_test_</span></a>…”.
+Can also be read from GLYPH_API_KEY environment variable.</p></li>
+<li><p><strong>base_url</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Base URL for the API. If not provided, falls back to:
+1) GLYPH_API_BASE environment variable
+2) Default: “<a class="reference external" href="https://dev.glyphapi.ai">https://dev.glyphapi.ai</a>”</p></li>
+<li><p><strong>timeout</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Request timeout in seconds (default: 30.0)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Uses GLYPH_API_KEY env var and default base URL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">ForgeClient</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Or specify explicitly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">ForgeClient</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;gf_live_abc123...&quot;</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.glyphapi.ai&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;sample.docx&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.DEFAULT_BASE_URL">
+<span class="sig-name descname"><span class="pre">DEFAULT_BASE_URL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://dev.glyphapi.ai'</span></em><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.DEFAULT_BASE_URL" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize ForgeClient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – API key for authentication. Falls back to GLYPH_API_KEY env var if not provided.</p></li>
+<li><p><strong>base_url</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Base URL for API (no trailing slash). Falls back to
+GLYPH_API_BASE env var or default URL if not provided.</p></li>
+<li><p><strong>timeout</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Default timeout for all requests in seconds</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – If no API key is provided or found in environment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.__enter__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.__exit__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the underlying HTTP client.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.build_schema_from_docx">
+<span class="sig-name descname"><span class="pre">build_schema_from_docx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">docx_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_artifacts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.build_schema_from_docx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.build_schema_from_docx" title="Link to this definition">¶</a></dt>
+<dd><p>Build a schema from a DOCX file via the API.</p>
+<p>Endpoint: POST /schema/build</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance for saving artifacts</p></li>
+<li><p><strong>docx_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to DOCX file (absolute or CWD-relative)</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save schema JSON (without .json extension)</p></li>
+<li><p><strong>include_artifacts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, retrieve and save tagged DOCX + unzipped files
+Adds ~300-800ms overhead depending on document complexity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Schema dict from API response</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status (401, 403, 429)</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – File not found or encoding error</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fast mode (schema only)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;sample.docx&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;my_schema&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Full mode (with artifacts for debugging/post-processing)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;sample.docx&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;my_schema&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">include_artifacts</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.run_schema">
+<span class="sig-name descname"><span class="pre">run_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plaintext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'assembled_output.docx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.run_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.run_schema" title="Link to this definition">¶</a></dt>
+<dd><p>Run a schema with plaintext to generate a DOCX.</p>
+<p>Endpoint: POST /schema/run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Schema dict (from build_schema_from_docx or loaded JSON)</p></li>
+<li><p><strong>plaintext</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Input text content</p></li>
+<li><p><strong>dest_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name for output DOCX file (saved in output_docx directory)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Local path to saved DOCX file</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – Failed to decode or save DOCX</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docx_path</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">run_schema</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">plaintext</span><span class="o">=</span><span class="s2">&quot;Sample text...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">dest_name</span><span class="o">=</span><span class="s2">&quot;output.docx&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.run_schema_bulk">
+<span class="sig-name descname"><span class="pre">run_schema_bulk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plaintexts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_concurrent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_name_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output_{index}.docx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.run_schema_bulk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.run_schema_bulk" title="Link to this definition">¶</a></dt>
+<dd><p>Run a schema with multiple plaintexts in parallel to generate multiple DOCX files.</p>
+<p>Endpoint: POST /schema/run/bulk</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Schema dict (from build_schema_from_docx or loaded JSON)</p></li>
+<li><p><strong>plaintexts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of plaintext strings to process (max 100)</p></li>
+<li><p><strong>max_concurrent</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of concurrent processes (default: 5, max: 20)</p></li>
+<li><p><strong>dest_name_pattern</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Pattern for output filenames. Use {index} placeholder (default: “output_{index}.docx”)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>results: List of dicts with index, status, docx_path (or error)</p></li>
+<li><p>total: Total number of plaintexts</p></li>
+<li><p>successful: Number of successful runs</p></li>
+<li><p>failed: Number of failed runs</p></li>
+<li><p>processing_time_seconds: Total processing time</p></li>
+<li><p>metered_count: Number of API calls metered</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict containing</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – If plaintexts exceeds 100 items or invalid parameters</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status (401, 403, 429)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each plaintext counts as 1 API call for billing purposes.
+Failed items return error messages but don’t block successful ones.
+All DOCX files are saved to workspace output_docx directory.</p>
+</div>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">run_schema_bulk</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">plaintexts</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Text 1...&quot;</span><span class="p">,</span> <span class="s2">&quot;Text 2...&quot;</span><span class="p">,</span> <span class="s2">&quot;Text 3...&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">max_concurrent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">dest_name_pattern</span><span class="o">=</span><span class="s2">&quot;invoice_</span><span class="si">{index}</span><span class="s2">.docx&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;successful&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.compress_schema">
+<span class="sig-name descname"><span class="pre">compress_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.compress_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.compress_schema" title="Link to this definition">¶</a></dt>
+<dd><p>Compress a schema by deduplicating redundant pattern descriptors.</p>
+<p>Many schemas have redundant pattern descriptor types (e.g., “H-SHORT” appearing
+multiple times with the same styles and properties). This endpoint compresses
+the schema by grouping pattern descriptors by type and selecting the highest
+scoring descriptor for each type.</p>
+<p>Endpoint: POST /schema/compress</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Schema dict to compress (from build_schema_from_docx or loaded JSON)</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save compressed schema JSON (without .json extension)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>compressed_schema: The compressed schema with deduplicated pattern descriptors</p></li>
+<li><p>stats: Compression statistics (original_count, compressed_count, reduction, etc.)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict containing</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status (401, 403, 429)</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – Failed to compress schema or save to workspace</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compress_schema</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;compressed_schema&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reduced from </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;stats&#39;</span><span class="p">][</span><span class="s1">&#39;original_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;stats&#39;</span><span class="p">][</span><span class="s1">&#39;compressed_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compressed_schema</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;compressed_schema&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.intake_plaintext_text">
+<span class="sig-name descname"><span class="pre">intake_plaintext_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.intake_plaintext_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.intake_plaintext_text" title="Link to this definition">¶</a></dt>
+<dd><p>Intake plaintext via JSON body.</p>
+<p>Endpoint: POST /plaintext/intake</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Plaintext content to intake</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save intake result JSON</p></li>
+<li><p><strong>**opts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Additional options matching PlaintextIntakeRequest fields:
+- unicode_form: str (default: “NFC”)
+- strip_zero_width: bool (default: True)
+- expand_tabs: bool (default: True)
+- ensure_final_newline: bool (default: True)
+- max_bytes: int (default: 10MB)
+- filename: str (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Intake result dict from API</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">intake_plaintext_text</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Sample text...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;intake_result&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">strip_zero_width</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="glyph_forge.core.client.forge_client.ForgeClient.intake_plaintext_file">
+<span class="sig-name descname"><span class="pre">intake_plaintext_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.intake_plaintext_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#glyph_forge.core.client.forge_client.ForgeClient.intake_plaintext_file" title="Link to this definition">¶</a></dt>
+<dd><p>Intake plaintext via file upload.</p>
+<p>Endpoint: POST /plaintext/intake_file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>file_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to plaintext file</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save intake result JSON</p></li>
+<li><p><strong>**opts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Query parameters for normalization options:
+- unicode_form: str
+- strip_zero_width: bool
+- expand_tabs: bool
+- ensure_final_newline: bool</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Intake result dict from API</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – File not found or unreadable</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">intake_plaintext_file</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;sample.txt&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;intake_result&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unicode_form</span><span class="o">=</span><span class="s2">&quot;NFKC&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<section id="core-methods">
+<h2>Core Methods<a class="headerlink" href="#core-methods" title="Link to this heading">¶</a></h2>
+<section id="schema-building">
+<h3>Schema Building<a class="headerlink" href="#schema-building" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">build_schema_from_docx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">docx_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_artifacts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.build_schema_from_docx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd><p>Build a schema from a DOCX file via the API.</p>
+<p>Endpoint: POST /schema/build</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance for saving artifacts</p></li>
+<li><p><strong>docx_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to DOCX file (absolute or CWD-relative)</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save schema JSON (without .json extension)</p></li>
+<li><p><strong>include_artifacts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, retrieve and save tagged DOCX + unzipped files
+Adds ~300-800ms overhead depending on document complexity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Schema dict from API response</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status (401, 403, 429)</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – File not found or encoding error</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fast mode (schema only)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;sample.docx&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;my_schema&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Full mode (with artifacts for debugging/post-processing)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;sample.docx&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;my_schema&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">include_artifacts</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="schema-running">
+<h3>Schema Running<a class="headerlink" href="#schema-running" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">run_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plaintext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'assembled_output.docx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.run_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd><p>Run a schema with plaintext to generate a DOCX.</p>
+<p>Endpoint: POST /schema/run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Schema dict (from build_schema_from_docx or loaded JSON)</p></li>
+<li><p><strong>plaintext</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Input text content</p></li>
+<li><p><strong>dest_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name for output DOCX file (saved in output_docx directory)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Local path to saved DOCX file</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – Failed to decode or save DOCX</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">docx_path</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">run_schema</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">plaintext</span><span class="o">=</span><span class="s2">&quot;Sample text...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">dest_name</span><span class="o">=</span><span class="s2">&quot;output.docx&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="bulk-processing">
+<h3>Bulk Processing<a class="headerlink" href="#bulk-processing" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">run_schema_bulk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plaintexts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_concurrent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_name_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output_{index}.docx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.run_schema_bulk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd><p>Run a schema with multiple plaintexts in parallel to generate multiple DOCX files.</p>
+<p>Endpoint: POST /schema/run/bulk</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Schema dict (from build_schema_from_docx or loaded JSON)</p></li>
+<li><p><strong>plaintexts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – List of plaintext strings to process (max 100)</p></li>
+<li><p><strong>max_concurrent</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Number of concurrent processes (default: 5, max: 20)</p></li>
+<li><p><strong>dest_name_pattern</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Pattern for output filenames. Use {index} placeholder (default: “output_{index}.docx”)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>results: List of dicts with index, status, docx_path (or error)</p></li>
+<li><p>total: Total number of plaintexts</p></li>
+<li><p>successful: Number of successful runs</p></li>
+<li><p>failed: Number of failed runs</p></li>
+<li><p>processing_time_seconds: Total processing time</p></li>
+<li><p>metered_count: Number of API calls metered</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict containing</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – If plaintexts exceeds 100 items or invalid parameters</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status (401, 403, 429)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each plaintext counts as 1 API call for billing purposes.
+Failed items return error messages but don’t block successful ones.
+All DOCX files are saved to workspace output_docx directory.</p>
+</div>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">run_schema_bulk</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">plaintexts</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Text 1...&quot;</span><span class="p">,</span> <span class="s2">&quot;Text 2...&quot;</span><span class="p">,</span> <span class="s2">&quot;Text 3...&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">max_concurrent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">dest_name_pattern</span><span class="o">=</span><span class="s2">&quot;invoice_</span><span class="si">{index}</span><span class="s2">.docx&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;successful&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="schema-compression">
+<h3>Schema Compression<a class="headerlink" href="#schema-compression" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">compress_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.compress_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd><p>Compress a schema by deduplicating redundant pattern descriptors.</p>
+<p>Many schemas have redundant pattern descriptor types (e.g., “H-SHORT” appearing
+multiple times with the same styles and properties). This endpoint compresses
+the schema by grouping pattern descriptors by type and selecting the highest
+scoring descriptor for each type.</p>
+<p>Endpoint: POST /schema/compress</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>schema</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Schema dict to compress (from build_schema_from_docx or loaded JSON)</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save compressed schema JSON (without .json extension)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>compressed_schema: The compressed schema with deduplicated pattern descriptors</p></li>
+<li><p>stats: Compression statistics (original_count, compressed_count, reduction, etc.)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict containing</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status (401, 403, 429)</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – Failed to compress schema or save to workspace</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compress_schema</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;compressed_schema&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reduced from </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;stats&#39;</span><span class="p">][</span><span class="s1">&#39;original_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;stats&#39;</span><span class="p">][</span><span class="s1">&#39;compressed_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compressed_schema</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;compressed_schema&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="plaintext-intake">
+<h3>Plaintext Intake<a class="headerlink" href="#plaintext-intake" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">intake_plaintext_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.intake_plaintext_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dd><p>Intake plaintext via JSON body.</p>
+<p>Endpoint: POST /plaintext/intake</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Plaintext content to intake</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save intake result JSON</p></li>
+<li><p><strong>**opts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Additional options matching PlaintextIntakeRequest fields:
+- unicode_form: str (default: “NFC”)
+- strip_zero_width: bool (default: True)
+- expand_tabs: bool (default: True)
+- ensure_final_newline: bool (default: True)
+- max_bytes: int (default: 10MB)
+- filename: str (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Intake result dict from API</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">intake_plaintext_text</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Sample text...&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;intake_result&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">strip_zero_width</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">intake_plaintext_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_as</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.intake_plaintext_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
+<dd><p>Intake plaintext via file upload.</p>
+<p>Endpoint: POST /plaintext/intake_file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Workspace instance</p></li>
+<li><p><strong>file_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Path to plaintext file</p></li>
+<li><p><strong>save_as</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Optional name to save intake result JSON</p></li>
+<li><p><strong>**opts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Query parameters for normalization options:
+- unicode_form: str
+- strip_zero_width: bool
+- expand_tabs: bool
+- ensure_final_newline: bool</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Intake result dict from API</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientIOError" title="glyph_forge.core.client.exceptions.ForgeClientIOError"><strong>ForgeClientIOError</strong></a> – Network/connection errors</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientHTTPError" title="glyph_forge.core.client.exceptions.ForgeClientHTTPError"><strong>ForgeClientHTTPError</strong></a> – API returned non-2xx status</p></li>
+<li><p><a class="reference internal" href="exceptions.html#glyph_forge.core.client.exceptions.ForgeClientError" title="glyph_forge.core.client.exceptions.ForgeClientError"><strong>ForgeClientError</strong></a> – File not found or unreadable</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">intake_plaintext_file</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ws</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;sample.txt&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;intake_result&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unicode_form</span><span class="o">=</span><span class="s2">&quot;NFKC&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="client-management">
+<h3>Client Management<a class="headerlink" href="#client-management" title="Link to this heading">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-prename descclassname"><span class="pre">ForgeClient.</span></span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/glyph_forge/core/client/forge_client.html#ForgeClient.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Link to this definition">¶</a></dt>
+<dd><p>Close the underlying HTTP client.</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading">¶</a></h2>
+<section id="basic-schema-build-and-run">
+<h3>Basic Schema Build and Run<a class="headerlink" href="#basic-schema-build-and-run" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">glyph_forge</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForgeClient</span><span class="p">,</span> <span class="n">create_workspace</span>
+
+<span class="c1"># Initialize</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">ForgeClient</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;gf_live_...&quot;</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">create_workspace</span><span class="p">()</span>
+
+<span class="c1"># Build schema</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span>
+    <span class="n">ws</span><span class="p">,</span>
+    <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;template.docx&quot;</span><span class="p">,</span>
+    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;my_schema&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Run schema</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">run_schema</span><span class="p">(</span>
+    <span class="n">ws</span><span class="p">,</span>
+    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+    <span class="n">plaintext</span><span class="o">=</span><span class="s2">&quot;Content here...&quot;</span><span class="p">,</span>
+    <span class="n">dest_name</span><span class="o">=</span><span class="s2">&quot;output.docx&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="with-context-manager">
+<h3>With Context Manager<a class="headerlink" href="#with-context-manager" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">glyph_forge</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForgeClient</span><span class="p">,</span> <span class="n">create_workspace</span>
+
+<span class="n">ws</span> <span class="o">=</span> <span class="n">create_workspace</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">ForgeClient</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;gf_live_...&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">build_schema_from_docx</span><span class="p">(</span>
+        <span class="n">ws</span><span class="p">,</span>
+        <span class="n">docx_path</span><span class="o">=</span><span class="s2">&quot;template.docx&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>Bulk Processing<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process multiple documents at once</span>
+<span class="n">plaintexts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Text 1...&quot;</span><span class="p">,</span> <span class="s2">&quot;Text 2...&quot;</span><span class="p">,</span> <span class="s2">&quot;Text 3...&quot;</span><span class="p">]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">run_schema_bulk</span><span class="p">(</span>
+    <span class="n">ws</span><span class="p">,</span>
+    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+    <span class="n">plaintexts</span><span class="o">=</span><span class="n">plaintexts</span><span class="p">,</span>
+    <span class="n">max_concurrent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">dest_name_pattern</span><span class="o">=</span><span class="s2">&quot;output_</span><span class="si">{index}</span><span class="s2">.docx&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;successful&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>Schema Compression<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compress schema to optimize size</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">compress_schema</span><span class="p">(</span>
+    <span class="n">ws</span><span class="p">,</span>
+    <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
+    <span class="n">save_as</span><span class="o">=</span><span class="s2">&quot;compressed_schema&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reduced from </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;stats&#39;</span><span class="p">][</span><span class="s1">&#39;original_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;stats&#39;</span><span class="p">][</span><span class="s1">&#39;compressed_count&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> pattern descriptors&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="workspace.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Workspace API</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../user_guide/workspace.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Workspace Management</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, Devpro LLC
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ForgeClient API</a><ul>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient"><code class="docutils literal notranslate"><span class="pre">ForgeClient</span></code></a><ul>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.DEFAULT_BASE_URL"><code class="docutils literal notranslate"><span class="pre">ForgeClient.DEFAULT_BASE_URL</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.__init__"><code class="docutils literal notranslate"><span class="pre">ForgeClient.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.__enter__"><code class="docutils literal notranslate"><span class="pre">ForgeClient.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.__exit__"><code class="docutils literal notranslate"><span class="pre">ForgeClient.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.close"><code class="docutils literal notranslate"><span class="pre">ForgeClient.close()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.build_schema_from_docx"><code class="docutils literal notranslate"><span class="pre">ForgeClient.build_schema_from_docx()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.run_schema"><code class="docutils literal notranslate"><span class="pre">ForgeClient.run_schema()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.run_schema_bulk"><code class="docutils literal notranslate"><span class="pre">ForgeClient.run_schema_bulk()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.compress_schema"><code class="docutils literal notranslate"><span class="pre">ForgeClient.compress_schema()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.intake_plaintext_text"><code class="docutils literal notranslate"><span class="pre">ForgeClient.intake_plaintext_text()</span></code></a></li>
+<li><a class="reference internal" href="#glyph_forge.core.client.forge_client.ForgeClient.intake_plaintext_file"><code class="docutils literal notranslate"><span class="pre">ForgeClient.intake_plaintext_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#core-methods">Core Methods</a><ul>
+<li><a class="reference internal" href="#schema-building">Schema Building</a><ul>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ForgeClient.build_schema_from_docx()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schema-running">Schema Running</a><ul>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">ForgeClient.run_schema()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bulk-processing">Bulk Processing</a><ul>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">ForgeClient.run_schema_bulk()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#schema-compression">Schema Compression</a><ul>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">ForgeClient.compress_schema()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plaintext-intake">Plaintext Intake</a><ul>
+<li><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">ForgeClient.intake_plaintext_text()</span></code></a></li>
+<li><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">ForgeClient.intake_plaintext_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#client-management">Client Management</a><ul>
+<li><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">ForgeClient.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage-examples">Usage Examples</a><ul>
+<li><a class="reference internal" href="#basic-schema-build-and-run">Basic Schema Build and Run</a></li>
+<li><a class="reference internal" href="#with-context-manager">With Context Manager</a></li>
+<li><a class="reference internal" href="#id7">Bulk Processing</a></li>
+<li><a class="reference internal" href="#id8">Schema Compression</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=4ebf8126"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
