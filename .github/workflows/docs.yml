@@ -16,12 +16,23 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DEVPRO_GH_APP_ID }}
+          private-key: ${{ secrets.DEVPRO_GH_APP_PRIVATE_KEY }}
+          owner: Devpro-LLC
+          repositories: glyph-forge-client,glyph-forge-api,glyph-sdk
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive
+          token: ${{ steps.app-token.outputs.token }}
       
       - name: Set up Python
         uses: actions/setup-python@v5
