@@ -4,8 +4,8 @@ from __future__ import annotations
 import json
 from typing import Dict, List, Optional
 
-from glyph_forge.core.workspace.runtime.engine import EngineAdapter, EngineConfigError, EngineIOError, _json_bytes
-from glyph_forge.core.workspace.storage.base import WorkspaceBase
+from glyph.core.workspace.runtime.engine import EngineAdapter, EngineConfigError, EngineIOError, _json_bytes
+from glyph.core.workspace.storage.base import WorkspaceBase
 
 # httpx is recommended; replace with `requests` if you prefer.
 try:

@@ -19,7 +19,7 @@ Options:
     -o, --output DIR         Output directory (default: ./glyph_workspace)
     --no-uuid                Don't use UUID in workspace directory name
     --no-artifacts           Don't retrieve tagged DOCX and unzipped files
-    --api-key KEY            API key (or set GLYPH_API_KEY env var)
+    --api-key KEY            API key (optional, or set GLYPH_API_KEY env var)
     --base-url URL           API base URL (default: https://dev.glyphapi.ai)
     --schema-name NAME       Name for saved schema file (default: schema)
     --dest-name NAME         Name for output DOCX (default: output.docx)
@@ -31,14 +31,17 @@ Examples:
     # Complete workflow with artifacts
     glyph-forge build-and-run resume.docx resume.txt -o ./output
 
-    # Build schema only, save to custom directory
+    # Build schema only (no API key required)
     glyph-forge build template.docx -o ./my_workspace --schema-name my_schema
 
-    # Run existing schema
+    # Run existing schema (no API key required)
     glyph-forge run schema.json input.txt -o ./output --dest-name result.docx
 
     # Disable artifact collection for faster processing
     glyph-forge build-and-run template.docx input.txt --no-artifacts
+
+    # Use without API key (if supported by your server)
+    glyph-forge build template.docx --no-artifacts
 """
 
 import sys
@@ -64,24 +67,19 @@ def setup_logging(verbose: bool = False) -> None:
     )
 
 
-def load_api_key(args_key: Optional[str]) -> str:
+def load_api_key(args_key: Optional[str]) -> Optional[str]:
     """
-    Load API key from args or environment.
+    Load API key from args or environment (optional).
 
     Priority: CLI arg > GLYPH_API_KEY > GLYPH_KEY
+
+    Returns:
+        API key if found, None otherwise
     """
     if args_key:
         return args_key
 
     key = os.getenv('GLYPH_API_KEY') or os.getenv('GLYPH_KEY')
-    if not key:
-        print("ERROR: API key not found", file=sys.stderr)
-        print("\nProvide API key via:", file=sys.stderr)
-        print("  1. --api-key argument", file=sys.stderr)
-        print("  2. GLYPH_API_KEY environment variable", file=sys.stderr)
-        print("  3. GLYPH_KEY environment variable", file=sys.stderr)
-        sys.exit(1)
-
     return key
 
 
@@ -126,13 +124,17 @@ def handle_http_error(e: ForgeClientHTTPError, client: ForgeClient) -> None:
         print("=" * 70, file=sys.stderr)
         print(f"\nError: {e}", file=sys.stderr)
 
-        masked_key = f"{client.api_key[:20]}..." if len(client.api_key) > 20 else client.api_key
-        print(f"\nAPI Key being used: {masked_key}", file=sys.stderr)
+        if client.api_key:
+            masked_key = f"{client.api_key[:20]}..." if len(client.api_key) > 20 else client.api_key
+            print(f"\nAPI Key being used: {masked_key}", file=sys.stderr)
 
-        print("\nPossible issues:", file=sys.stderr)
-        print("  1. API key format is incorrect (should start with 'gf_live_' or 'gf_test_')", file=sys.stderr)
-        print("  2. API key is invalid or expired", file=sys.stderr)
-        print("  3. API key doesn't have necessary permissions", file=sys.stderr)
+            print("\nPossible issues:", file=sys.stderr)
+            print("  1. API key format is incorrect (should start with 'gf_live_' or 'gf_test_')", file=sys.stderr)
+            print("  2. API key is invalid or expired", file=sys.stderr)
+            print("  3. API key doesn't have necessary permissions", file=sys.stderr)
+        else:
+            print("\nNo API key provided.", file=sys.stderr)
+            print("This endpoint may require authentication.", file=sys.stderr)
 
         print("\nSteps to resolve:", file=sys.stderr)
         print("  1. Check your API key", file=sys.stderr)
@@ -172,7 +174,7 @@ def cmd_build_and_run(args: argparse.Namespace) -> None:
         print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Load API key
+    # Load API key (optional)
     api_key = load_api_key(args.api_key)
 
     # Step 1: Create workspace
@@ -185,6 +187,8 @@ def cmd_build_and_run(args: argparse.Namespace) -> None:
 
     # Step 2: Initialize client
     print("\n[2/4] Initializing ForgeClient...")
+    auth_note = " (with authentication)" if api_key else " (no authentication)"
+    print(f"Initializing client{auth_note}...")
     client = ForgeClient(
         api_key=api_key,
         base_url=args.base_url
@@ -246,7 +250,7 @@ def cmd_build(args: argparse.Namespace) -> None:
         print(f"ERROR: Template DOCX not found: {template_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Load API key
+    # Load API key (optional)
     api_key = load_api_key(args.api_key)
 
     # Step 1: Create workspace
@@ -259,6 +263,8 @@ def cmd_build(args: argparse.Namespace) -> None:
 
     # Step 2: Initialize client and build schema
     print("\n[2/2] Building schema...")
+    auth_note = " (with authentication)" if api_key else " (no authentication)"
+    print(f"Initializing client{auth_note}...")
     client = ForgeClient(
         api_key=api_key,
         base_url=args.base_url
@@ -310,7 +316,7 @@ def cmd_run(args: argparse.Namespace) -> None:
         print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Load API key
+    # Load API key (optional)
     api_key = load_api_key(args.api_key)
 
     # Step 1: Create workspace
@@ -335,6 +341,8 @@ def cmd_run(args: argparse.Namespace) -> None:
 
     # Step 3: Initialize client and run schema
     print("\n[3/3] Running schema...")
+    auth_note = " (with authentication)" if api_key else " (no authentication)"
+    print(f"Initializing client{auth_note}...")
     client = ForgeClient(
         api_key=api_key,
         base_url=args.base_url
@@ -408,7 +416,7 @@ def main() -> None:
     )
     common_args.add_argument(
         '--api-key',
-        help='API key (or set GLYPH_API_KEY env var)'
+        help='API key (optional, or set GLYPH_API_KEY env var)'
     )
     common_args.add_argument(
         '--base-url',

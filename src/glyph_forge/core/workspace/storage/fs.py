@@ -20,64 +20,56 @@ class FilesystemWorkspace(WorkspaceBase):  # or just `object` if you haven't cre
             root_dir = _default_root_dir()
 
         os.makedirs(root_dir, exist_ok=True)
-        base_root = root_dir
+        self.base_root = root_dir
 
         # run id
-        run_id = (
+        self.run_id = (
             datetime.now().strftime("%Y%m%dT%H%M%S") + "_" + str(uuid.uuid4())[:8]
             if use_uuid else "default"
         )
 
-        root_dir_path = os.path.join(base_root, run_id)
-        os.makedirs(root_dir_path, exist_ok=True)
+        self.root_dir = os.path.join(self.base_root, self.run_id)
+        os.makedirs(self.root_dir, exist_ok=True)
 
-        paths = {
-            "input_docx":      os.path.join(root_dir_path, "input", "docx"),
-            "input_plaintext": os.path.join(root_dir_path, "input", "plaintext"),
-            "input_unzipped":  os.path.join(root_dir_path, "input", "unzipped"),
-            "output_configs":  os.path.join(root_dir_path, "output", "configs"),
-            "output_docx":     os.path.join(root_dir_path, "output", "docx"),
+        self.paths = {
+            "input_docx":      os.path.join(self.root_dir, "input", "docx"),
+            "input_plaintext": os.path.join(self.root_dir, "input", "plaintext"),
+            "input_unzipped":  os.path.join(self.root_dir, "input", "unzipped"),
+            "output_configs":  os.path.join(self.root_dir, "output", "configs"),
+            "output_docx":     os.path.join(self.root_dir, "output", "docx"),
         }
         if custom_paths:
-            paths.update(custom_paths)
+            self.paths.update(custom_paths)
 
-        # Initialize parent class with all required parameters
-        super().__init__(
-            base_root=base_root,
-            root_dir=root_dir_path,
-            run_id=run_id,
-            paths=paths,
-        )
-
-        # Create directories
-        for path in self._paths.values():
+        for path in self.paths.values():
             # Make dirs only (skip files)
             if os.path.splitext(path)[1] == "":
                 os.makedirs(path, exist_ok=True)
 
     # --- helpers (same as your current class) ---
     def save_json(self, key: str, name: str, data: dict) -> str:
-        path = os.path.join(self._paths[key], f"{name}.json")
+        path = os.path.join(self.paths[key], f"{name}.json")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         return path
 
     def load_json(self, key: str, name: str) -> dict:
-        path = os.path.join(self._paths[key], f"{name}.json")
+        path = os.path.join(self.paths[key], f"{name}.json")
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def save_file(self, key: str, src_path: str, dest_name: Optional[str] = None) -> str:
-        dest_path = os.path.join(self._paths[key], dest_name or os.path.basename(src_path))
+        dest_path = os.path.join(self.paths[key], dest_name or os.path.basename(src_path))
         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
         shutil.copy2(src_path, dest_path)
         return dest_path
 
-    
+    def directory(self, key: str) -> str:
+        return self.paths[key]
 
     def delete_all(self):
-        for path in self._paths.values():
+        for path in self.paths.values():
             if os.path.exists(path):
                 shutil.rmtree(path)
                 os.makedirs(path, exist_ok=True)
