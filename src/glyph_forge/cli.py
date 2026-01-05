@@ -7,6 +7,7 @@ Usage:
     glyph-forge build-and-run <template.docx> <input.txt> [options]
     glyph-forge build <template.docx> [options]
     glyph-forge run <schema.json> <input.txt> [options]
+    glyph-forge ask <message> [options]
     glyph-forge --version
     glyph-forge --help
 
@@ -14,6 +15,7 @@ Commands:
     build-and-run    Complete workflow: build schema + run with input
     build            Build schema from DOCX template only
     run              Run existing schema with plaintext input
+    ask              Send a message to the Glyph Agent multi-agent system
 
 Options:
     -o, --output DIR         Output directory (default: ./glyph_workspace)
@@ -42,6 +44,10 @@ Examples:
 
     # Use without API key (if supported by your server)
     glyph-forge build template.docx --no-artifacts
+
+    # Send message to Glyph Agent
+    glyph-forge ask "Create a schema for a quarterly report" --api-key gf_live_...
+    glyph-forge ask "Add a risks section to the schema" --user-id user123 --conversation-id conv456
 """
 
 import sys
@@ -385,6 +391,142 @@ def cmd_run(args: argparse.Namespace) -> None:
         client.close()
 
 
+def cmd_ask(args: argparse.Namespace) -> None:
+    """Execute ask command - send message to Glyph Agent."""
+    print_banner("Glyph Forge - Ask Agent")
+
+    # Load API key (required for ask command)
+    api_key = load_api_key(args.api_key)
+    if not api_key:
+        print("ERROR: API key required for /ask endpoint.", file=sys.stderr)
+        print("Provide --api-key or set GLYPH_API_KEY environment variable.\n", file=sys.stderr)
+        sys.exit(1)
+
+    # Initialize client
+    print("\n[1/2] Initializing ForgeClient...")
+    client = ForgeClient(
+        api_key=api_key,
+        base_url=args.base_url
+    )
+    print(f"Connected to: {client.base_url}")
+
+    try:
+        # Send message to agent
+        print(f"\n[2/2] Sending message to agent...")
+        print(f"  - Message: {args.message[:100]}{'...' if len(args.message) > 100 else ''}")
+        if args.user_id:
+            print(f"  - User ID: {args.user_id}")
+        if args.conversation_id:
+            print(f"  - Conversation ID: {args.conversation_id}")
+
+        # Build conversation history if provided
+        conversation_history = None
+        if args.history_file:
+            history_path = Path(args.history_file).resolve()
+            if not history_path.exists():
+                print(f"ERROR: History file not found: {history_path}", file=sys.stderr)
+                sys.exit(1)
+            import json
+            with open(history_path, 'r', encoding='utf-8') as f:
+                conversation_history = json.load(f)
+            print(f"  - Loaded conversation history: {len(conversation_history)} messages")
+
+        response = client.ask(
+            message=args.message,
+            tenant_id=args.tenant_id,
+            user_id=args.user_id,
+            conversation_id=args.conversation_id,
+            conversation_history=conversation_history,
+            real_time=args.real_time,
+            strict_validation=args.strict_validation
+        )
+
+        # Print response
+        print("\n" + "=" * 70)
+        print("  AGENT RESPONSE")
+        print("=" * 70)
+        print(f"\n{response.get('response', '')}\n")
+
+        # Show metadata
+        if args.verbose:
+            print("\n" + "-" * 70)
+            print("  METADATA")
+            print("-" * 70)
+            metadata = response.get('metadata', {})
+            for key, value in metadata.items():
+                print(f"  - {key}: {value}")
+
+        # Show usage
+        usage = response.get('usage')
+        if usage:
+            print("\n" + "-" * 70)
+            print("  TOKEN USAGE")
+            print("-" * 70)
+            print(f"  - Prompt tokens: {usage.get('prompt_tokens', 0):,}")
+            print(f"  - Completion tokens: {usage.get('completion_tokens', 0):,}")
+            print(f"  - Total tokens: {usage.get('total_tokens', 0):,}")
+
+        # Show schema if present
+        schema = response.get('schema') or response.get('document_schema')
+        if schema:
+            print("\n" + "-" * 70)
+            print("  SCHEMA GENERATED")
+            print("-" * 70)
+            print(f"  - Pattern descriptors: {len(schema.get('pattern_descriptors', []))}")
+            if args.save_schema:
+                import json
+                schema_path = Path(args.save_schema).resolve()
+                schema_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(schema_path, 'w', encoding='utf-8') as f:
+                    json.dump(schema, f, indent=2)
+                print(f"  - Saved to: {schema_path}")
+
+        # Show plaintext if present
+        plaintext = response.get('plaintext')
+        if plaintext:
+            print("\n" + "-" * 70)
+            print("  PLAINTEXT GENERATED")
+            print("-" * 70)
+            print(f"  - Length: {len(plaintext)} characters")
+            if args.save_plaintext:
+                plaintext_path = Path(args.save_plaintext).resolve()
+                plaintext_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(plaintext_path, 'w', encoding='utf-8') as f:
+                    f.write(plaintext)
+                print(f"  - Saved to: {plaintext_path}")
+
+        # Show validation result if present
+        validation = response.get('validation_result')
+        if validation:
+            print("\n" + "-" * 70)
+            print("  VALIDATION RESULT")
+            print("-" * 70)
+            is_valid = validation.get('is_valid', False)
+            print(f"  - Valid: {is_valid}")
+            if not is_valid:
+                errors = validation.get('errors', [])
+                print(f"  - Errors: {len(errors)}")
+                if args.verbose and errors:
+                    for i, error in enumerate(errors[:5], 1):
+                        print(f"    {i}. {error}")
+
+        print("\n" + "=" * 70 + "\n")
+
+    except ForgeClientHTTPError as e:
+        handle_http_error(e, client)
+    except (ForgeClientError, ForgeClientIOError) as e:
+        print(f"\nERROR: {e}\n", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nUNEXPECTED ERROR: {e}\n", file=sys.stderr)
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+    finally:
+        client.close()
+
+
 def main() -> None:
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -485,6 +627,48 @@ def main() -> None:
         help='Name for output DOCX (default: output.docx)'
     )
 
+    # ask command
+    parser_ask = subparsers.add_parser(
+        'ask',
+        parents=[common_args],
+        help='Send a message to the Glyph Agent multi-agent system'
+    )
+    parser_ask.add_argument('message', help='Message to send to the agent')
+    parser_ask.add_argument(
+        '--user-id',
+        help='User identifier for rate limiting and tracking'
+    )
+    parser_ask.add_argument(
+        '--tenant-id',
+        help='Tenant identifier for rate limiting'
+    )
+    parser_ask.add_argument(
+        '--conversation-id',
+        help='Conversation ID for context tracking'
+    )
+    parser_ask.add_argument(
+        '--history-file',
+        help='Path to JSON file with conversation history (list of {role, content} dicts)'
+    )
+    parser_ask.add_argument(
+        '--real-time',
+        action='store_true',
+        help='Enable real-time sandbox updates'
+    )
+    parser_ask.add_argument(
+        '--strict-validation',
+        action='store_true',
+        help='Enable strict validation mode'
+    )
+    parser_ask.add_argument(
+        '--save-schema',
+        help='Save generated schema to file (JSON)'
+    )
+    parser_ask.add_argument(
+        '--save-plaintext',
+        help='Save generated plaintext to file'
+    )
+
     # Parse arguments
     args = parser.parse_args()
 
@@ -502,6 +686,8 @@ def main() -> None:
         cmd_build(args)
     elif args.command == 'run':
         cmd_run(args)
+    elif args.command == 'ask':
+        cmd_ask(args)
 
 
 if __name__ == '__main__':
