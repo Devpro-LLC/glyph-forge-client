@@ -25,7 +25,7 @@ def compress_schema(schema: Dict[str, Any]) -> Dict[str, Any]:
     # Create a deep copy to avoid modifying the input
     compressed = dict(schema)
 
-    pattern_descriptors = schema.get("pattern_descriptors", [])
+    pattern_descriptors = schema.get("selectors", [])
     if not pattern_descriptors:
         return compressed
 
@@ -46,7 +46,7 @@ def compress_schema(schema: Dict[str, Any]) -> Dict[str, Any]:
             best = _select_best_descriptor(descriptors)
             deduplicated.append(best)
 
-    compressed["pattern_descriptors"] = deduplicated
+    compressed["selectors"] = deduplicated
     return compressed
 
 
@@ -95,12 +95,12 @@ def get_compression_stats(original_schema: Dict[str, Any], compressed_schema: Di
     Returns:
         Dictionary with compression statistics
     """
-    original_count = len(original_schema.get("pattern_descriptors", []))
-    compressed_count = len(compressed_schema.get("pattern_descriptors", []))
+    original_count = len(original_schema.get("selectors", []))
+    compressed_count = len(compressed_schema.get("selectors", []))
 
     # Count duplicates by type in original
     type_counts = defaultdict(int)
-    for desc in original_schema.get("pattern_descriptors", []):
+    for desc in original_schema.get("selectors", []):
         descriptor_type = desc.get("type", "UNKNOWN")
         type_counts[descriptor_type] += 1
 

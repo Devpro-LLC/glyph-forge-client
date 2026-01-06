@@ -48,7 +48,7 @@ def create_test_schema_with_duplicates():
     appears multiple times, which is common in schemas built from complex documents.
     """
     return {
-        "pattern_descriptors": [
+        "selectors": [
             {
                 "type": "H-SHORT",
                 "score": 0.85,
@@ -105,7 +105,7 @@ class TestCompressSchema:
         # Mock API response
         mock_response = {
             "compressed_schema": {
-                "pattern_descriptors": [
+                "selectors": [
                     {
                         "type": "H-SHORT",
                         "score": 0.90,
@@ -153,7 +153,7 @@ class TestCompressSchema:
         compressed_schema = result["compressed_schema"]
         stats = result["stats"]
 
-        assert len(compressed_schema["pattern_descriptors"]) == 2
+        assert len(compressed_schema["selectors"]) == 2
         assert stats["original_count"] == 5
         assert stats["compressed_count"] == 2
         assert stats["reduction"] == 3
@@ -172,7 +172,7 @@ class TestCompressSchema:
 
         # Mock API response
         mock_compressed = {
-            "pattern_descriptors": [
+            "selectors": [
                 {"type": "H-SHORT", "score": 0.90},
             ],
             "global_defaults": test_schema["global_defaults"],
@@ -247,7 +247,7 @@ class TestCompressSchema:
 
         # Mock response that preserves other fields
         mock_compressed = {
-            "pattern_descriptors": [{"type": "H-SHORT", "score": 0.90}],
+            "selectors": [{"type": "H-SHORT", "score": 0.90}],
             "global_defaults": test_schema["global_defaults"],
             "source_docx_base64": test_schema["source_docx_base64"],
         }
@@ -305,7 +305,7 @@ class TestCompressSchema:
 
         # Schema with empty pattern_descriptors
         test_schema = {
-            "pattern_descriptors": [],
+            "selectors": [],
             "global_defaults": {"page_size": {"width": 12240, "height": 15840}},
         }
 
