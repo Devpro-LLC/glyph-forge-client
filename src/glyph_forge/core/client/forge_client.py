@@ -13,10 +13,10 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 from datetime import datetime
 
-from .exceptions import ForgeClientError, ForgeClientIOError
+from .exceptions import ForgeClientError, ForgeClientIOError, ForgeClientHTTPError
 
 # Import SDK components from submodule
 from glyph.core.utils.docx_intake import intake_docx
@@ -25,6 +25,14 @@ from glyph.core.schema_runner.run_schema import GlyphSchemaRunner
 
 # Import local compression utilities
 from glyph_forge.core.compression import compress_schema as compress_schema_fn, get_compression_stats
+
+# Import httpx for API calls (optional dependency)
+try:
+    import httpx
+    HTTPX_AVAILABLE = True
+except ImportError:
+    httpx = None
+    HTTPX_AVAILABLE = False
 
 
 logger = logging.getLogger(__name__)
@@ -60,17 +68,20 @@ class ForgeClient:
         Initialize ForgeClient.
 
         Args:
-            api_key: Deprecated (no longer used)
-            base_url: Deprecated (no longer used)
-            timeout: Deprecated (no longer used)
+            api_key: API key for Glyph Forge API (for /ask endpoint and other API calls)
+            base_url: Base URL for API (default: https://dev.glyphapi.ai)
+            timeout: Request timeout in seconds (default: 30.0)
         """
-        # Store deprecated params for backwards compatibility
+        # Store params
         self.api_key = api_key or os.getenv("GLYPH_API_KEY")
         self.base_url = base_url or os.getenv("GLYPH_API_BASE") or "https://dev.glyphapi.ai"
         self.timeout = timeout
 
+        # HTTP client for API calls (lazy initialization)
+        self._http_client: Optional[httpx.Client] = None
+
         # Log initialization
-        logger.info(f"ForgeClient initialized (local SDK mode)")
+        logger.info(f"ForgeClient initialized (local SDK mode + API support)")
 
     def __enter__(self):
         return self
@@ -80,8 +91,31 @@ class ForgeClient:
         return False
 
     def close(self):
-        """Close the client (no-op for SDK mode)."""
-        pass
+        """Close the client and cleanup resources."""
+        if self._http_client:
+            self._http_client.close()
+            self._http_client = None
+
+    def _get_http_client(self) -> httpx.Client:
+        """Get or create HTTP client for API calls."""
+        if not HTTPX_AVAILABLE:
+            raise ForgeClientError(
+                "httpx is required for API calls. Install with: pip install httpx",
+                endpoint="API"
+            )
+
+        if self._http_client is None:
+            headers = {}
+            if self.api_key:
+                headers["Authorization"] = f"Bearer {self.api_key}"
+
+            self._http_client = httpx.Client(
+                base_url=self.base_url.rstrip("/"),
+                headers=headers,
+                timeout=self.timeout
+            )
+
+        return self._http_client
 
     def build_schema_from_docx(
         self,
@@ -544,6 +578,147 @@ class ForgeClient:
             raise ForgeClientError(
                 f"Failed to read file {file_abs}: {e}",
                 endpoint="/plaintext/intake_file",
+            ) from e
+
+    def ask(
+        self,
+        *,
+        message: str,
+        tenant_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        conversation_id: Optional[str] = None,
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        current_schema: Optional[Dict[str, Any]] = None,
+        current_plaintext: Optional[str] = None,
+        current_document: Optional[Dict[str, Any]] = None,
+        real_time: bool = False,
+        strict_validation: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Send a message to the Glyph Agent multi-agent system via API.
+
+        This endpoint orchestrates:
+        1. Intent classification
+        2. Agent routing (schema, plaintext, validation, conversation)
+        3. Multi-step workflows
+        4. Markup application
+        5. Conversation state management
+
+        Args:
+            message: The message to send to the agent (required)
+            tenant_id: Tenant identifier for rate limiting
+            user_id: User identifier for rate limiting
+            conversation_id: Conversation ID for context tracking
+            conversation_history: Previous conversation messages for context
+                                 List of dicts with 'role' and 'content' keys
+            current_schema: Current schema state (for incremental modifications)
+            current_plaintext: Current plaintext content (for incremental modifications)
+            current_document: Legacy combined document state
+            real_time: Enable real-time sandbox updates
+            strict_validation: Enable strict validation mode
+
+        Returns:
+            Dict containing:
+            - response: The agent's response message
+            - document: Generated or modified document (if applicable)
+            - schema/document_schema: Document schema (if schema request)
+            - plaintext: Generated plaintext content
+            - validation_result: Validation results (if validation request)
+            - metadata: Additional metadata (intent, routing, etc.)
+            - usage: Token usage information
+            - conversation_id: Conversation ID for tracking
+
+        Raises:
+            ForgeClientError: Missing API key or request failed
+            ForgeClientHTTPError: HTTP error from API
+            ForgeClientIOError: Network or connection error
+
+        Example:
+            >>> client = ForgeClient(api_key="your-api-key")
+            >>> response = client.ask(
+            ...     message="Create a schema for a quarterly report",
+            ...     user_id="user123"
+            ... )
+            >>> print(response['response'])
+            >>> if 'schema' in response:
+            ...     print(f"Schema generated: {len(response['schema']['pattern_descriptors'])} descriptors")
+        """
+        if not self.api_key:
+            raise ForgeClientError(
+                "API key required for /ask endpoint. "
+                "Provide api_key parameter or set GLYPH_API_KEY environment variable.",
+                endpoint="/glyph_agent/ask"
+            )
+
+        logger.info(f"Sending message to /glyph_agent/ask: {message[:100]}...")
+
+        # Build request payload
+        payload: Dict[str, Any] = {
+            "message": message,
+        }
+
+        # Add optional parameters
+        if tenant_id:
+            payload["tenant_id"] = tenant_id
+        if user_id:
+            payload["user_id"] = user_id
+        if conversation_id:
+            payload["conversation_id"] = conversation_id
+        if conversation_history:
+            payload["conversation_history"] = conversation_history
+        if current_schema:
+            payload["current_schema"] = current_schema
+        if current_plaintext:
+            payload["current_plaintext"] = current_plaintext
+        if current_document:
+            payload["current_document"] = current_document
+        if real_time:
+            payload["real_time"] = real_time
+        if strict_validation:
+            payload["strict_validation"] = strict_validation
+
+        try:
+            client = self._get_http_client()
+            response = client.post("/glyph_agent/ask", json=payload)
+
+            # Check for HTTP errors
+            if response.status_code != 200:
+                error_detail = response.text
+                try:
+                    error_json = response.json()
+                    error_detail = error_json.get("detail", response.text)
+                except Exception:
+                    pass
+
+                raise ForgeClientHTTPError(
+                    f"API request failed",
+                    status_code=response.status_code,
+                    response_body=error_detail,
+                    endpoint="/glyph_agent/ask"
+                )
+
+            # Parse response
+            result = response.json()
+
+            logger.info(
+                f"Agent response received: {len(result.get('response', ''))} chars, "
+                f"usage: {result.get('usage', {}).get('total_tokens', 'N/A')} tokens"
+            )
+
+            return result
+
+        except ForgeClientHTTPError:
+            raise
+        except httpx.RequestError as e:
+            raise ForgeClientIOError(
+                f"Network error during /ask request: {e}",
+                endpoint="/glyph_agent/ask",
+                original_error=e
+            ) from e
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to call /ask endpoint: {e}",
+                endpoint="/glyph_agent/ask",
             ) from e
 
     def __repr__(self) -> str:
