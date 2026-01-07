@@ -286,10 +286,10 @@ Custom Regex
      }
    }
 
-Mixed Pattern Types
+Array Pattern Types
 ~~~~~~~~~~~~~~~~~~~
 
-You can mix EXACT and REGEX in the same array:
+You can add multiple EXACT or REGEX types in the same array:
 
 .. code-block:: json
 
@@ -297,8 +297,21 @@ You can mix EXACT and REGEX in the same array:
      "type": [
        "EXACT:Education",
        "EXACT:Experience",
-       "REGEX:^[A-Z][a-z]+\\sEducation$",
-       "REGEX:^[A-Z][a-z]+\\sTechnical Skills$"
+     ],
+     "style": {
+       "font": {
+         "bold": true,
+         "size": 14
+       }
+     }
+   }
+
+.. code-block:: json
+
+   {
+     "type": [
+     "REGEX:^[A-Z][a-z]+\\sEducation$",
+     "REGEX:^[A-Z][a-z]+\\sTechnical Skills$"
      ],
      "style": {
        "font": {
