@@ -355,6 +355,7 @@ Next Steps
 
 Now that you understand the basics of Glyph selectors and patterns, you can:
 
-1. Review the :doc:`../api/client` for detailed API documentation
-2. Explore more examples in the :doc:`../examples/basic_usage` section
-3. Learn about advanced features in the :doc:`quickstart` guide
+1. Check the :doc:`style_reference` for a complete list of all supported style properties
+2. Review the :doc:`../api/client` for detailed API documentation
+3. Explore more examples in the :doc:`../examples/basic_usage` section
+4. Learn about advanced features in the :doc:`quickstart` guide
