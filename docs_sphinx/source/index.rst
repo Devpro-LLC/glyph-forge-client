@@ -77,6 +77,7 @@ Table of Contents
 
    user_guide/installation
    user_guide/how_to_use
+   user_guide/style_reference
    user_guide/quickstart
    user_guide/authentication
    user_guide/workspace
