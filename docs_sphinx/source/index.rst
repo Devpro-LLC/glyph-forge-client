@@ -21,6 +21,9 @@ Features
 
 - **Schema Building**: Build schemas from DOCX templates
 - **Schema Running**: Generate documents from schemas and plaintext
+- **Markup Language**: Lightweight syntax for document formatting
+- **Image Support**: Extract, render, and manage inline images
+- **CLI Tools**: Command-line interface for schema operations
 - **Bulk Processing**: Process multiple documents in parallel
 - **Schema Compression**: Optimize schemas by deduplicating pattern descriptors
 - **Plaintext Processing**: Intake and normalize plaintext content
@@ -79,6 +82,9 @@ Table of Contents
    user_guide/quickstart
    user_guide/authentication
    user_guide/workspace
+   user_guide/cli
+   user_guide/markup
+   user_guide/images
 
 .. toctree::
    :maxdepth: 2
@@ -90,12 +96,19 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 2
+   :caption: Reference
+
+   reference/styles
+
+.. toctree::
+   :maxdepth: 2
    :caption: Examples
 
    examples/basic_usage
    examples/bulk_processing
    examples/compression
    examples/advanced
+   examples/images
 
 .. toctree::
    :maxdepth: 1
