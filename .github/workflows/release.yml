@@ -1,8 +1,13 @@
 name: Release (auto on _version change)
 
 on:
+  pull_request:
+    branches:
+      - prod
+    types: [opened, synchronize, reopened]
   push:
-    branches: [ main ]        # <-- change if your default branch is different
+    branches:
+      - prod
   workflow_dispatch: {}
 
 permissions:
@@ -123,7 +128,7 @@ jobs:
 
   publish-testpypi:
     needs: [detect-version-change, build]
-    if: needs.detect-version-change.outputs.changed == 'true'
+    if: needs.detect-version-change.outputs.changed == 'true' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       id-token: write  # Required for Trusted Publishing
@@ -147,9 +152,9 @@ jobs:
           echo "  pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ glyph-forge==${{ needs.detect-version-change.outputs.version }}"
 
   publish-pypi:
-    # Only publish to real PyPI if it's not a pre-release
+    # Only publish to real PyPI if it's not a pre-release and not a PR
     needs: [detect-version-change, build]
-    if: needs.detect-version-change.outputs.changed == 'true' && needs.detect-version-change.outputs.is_prerelease == 'false'
+    if: needs.detect-version-change.outputs.changed == 'true' && needs.detect-version-change.outputs.is_prerelease == 'false' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

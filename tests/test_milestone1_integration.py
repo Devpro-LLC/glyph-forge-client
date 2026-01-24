@@ -200,7 +200,7 @@ def test_milestone1_comprehensive_integration(tmp_path: Path):
     schema = builder.run()
 
     # ===== STEP 3: Verify all styles are captured in schema =====
-    descriptors = schema["pattern_descriptors"]
+    descriptors = schema["selectors"]
     global_defaults = schema.get("global_defaults", {})
 
     print("\n" + "="*60)

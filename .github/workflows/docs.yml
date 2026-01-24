@@ -1,9 +1,17 @@
 name: Build and Deploy Documentation
 
 on:
+  pull_request:
+    branches:
+      - prod
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'docs_sphinx/**'
+      - 'src/**'
+      - '.github/workflows/docs.yml'
   push:
     branches:
-      - main
+      - prod
     paths:
       - 'docs_sphinx/**'
       - 'src/**'

@@ -1,39 +1,16 @@
-# glyph/core/workspace/workspace.py
+# glyph_forge/core/workspace/workspace.py
 """
-Backwards-compatible workspace entrypoint.
+Workspace wrapper that re-exports the SDK's Workspace class.
 
-- Keeps `Workspace` import stable for existing callers.
-- Exposes factories (`WorkspaceFactory`, `EngineFactory`) and `WorkspaceConfig`.
-- Adds tiny convenience helpers `create_workspace` and `create_engine`.
-
-Usage (local SDK):
-    from glyph_forge.core.workspace.workspace import Workspace, create_engine
-    ws = Workspace(use_uuid=True)
-    engine = create_engine(ws)  # local by default (GLYPH_MODE=local)
-
-Usage (client / FastAPI):
-    import os
-    os.environ["GLYPH_MODE"] = "client"
-    os.environ["GLYPH_API_BASE"] = "https://api.glyphapi.ai"
-    os.environ["GLYPH_API_KEY"] = "<token>"
-
-    from glyph_forge.core.workspace.workspace import Workspace, create_engine
-    ws = Workspace(use_uuid=True)
-    engine = create_engine(ws)  # client adapter auto-selected
+This maintains backwards compatibility while using the SDK's implementation.
 """
 
 from __future__ import annotations
 
 from typing import Optional, Dict
 
-# Public surface for callers that previously did:
-#   from glyph_forge.core.workspace.workspace import Workspace
-from glyph_forge.core.workspace.storage.fs import FilesystemWorkspace as Workspace  # noqa: F401
-
-# New configurable pieces
-from glyph_forge.core.workspace.bootstrap import WorkspaceFactory, EngineFactory  # noqa: F401
-from glyph_forge.core.workspace.config import WorkspaceConfig  # noqa: F401
-from .runtime.engine import GlyphEngine  # type: ignore  # exposed for typing only
+# Import Workspace from SDK
+from glyph.core.workspace import Workspace
 
 
 def create_workspace(
@@ -43,40 +20,39 @@ def create_workspace(
     custom_paths: Optional[Dict[str, str]] = None,
 ) -> Workspace:
     """
-    Convenience helper to create a filesystem-backed workspace using the
-    new factory while keeping a stable import surface.
+    Create a filesystem-backed workspace.
 
-    Equivalent to: WorkspaceFactory.create(...)
+    Args:
+        root_dir: Base directory for storing artifacts (default: auto-detected)
+        use_uuid: Whether to create a unique run folder (timestamp+uuid)
+        custom_paths: Optional overrides for default paths
+
+    Returns:
+        Workspace instance
     """
-    return WorkspaceFactory.create(
+    return Workspace(
         root_dir=root_dir,
         use_uuid=use_uuid,
         custom_paths=custom_paths,
     )
 
 
-def create_engine(
-    workspace: Workspace,
-    config: Optional[WorkspaceConfig] = None,
-) -> "GlyphEngine":
-    """
-    Convenience helper to build a mode-aware engine (local/client) for the
-    provided workspace. Mode is selected via `config` or environment
-    (see `WorkspaceConfig` for GLYPH_* variables).
+# Deprecated - kept for backwards compatibility
+WorkspaceFactory = None
+EngineFactory = None
+WorkspaceConfig = None
 
-    Equivalent to: EngineFactory.create(workspace, config)
-    """
-    return EngineFactory.create(workspace, cfg=config)
+
+def create_engine(workspace: Workspace, config: Optional[any] = None) -> None:
+    """Deprecated - no longer used."""
+    raise NotImplementedError("create_engine is deprecated in SDK mode")
 
 
 __all__ = [
-    # Back-compat alias
     "Workspace",
-    # New factories & config
+    "create_workspace",
+    "create_engine",
     "WorkspaceFactory",
     "EngineFactory",
     "WorkspaceConfig",
-    # Convenience creators
-    "create_workspace",
-    "create_engine",
 ]

@@ -79,6 +79,7 @@ Table of Contents
    :caption: User Guide
 
    user_guide/installation
+   user_guide/how_to_use
    user_guide/quickstart
    user_guide/authentication
    user_guide/workspace

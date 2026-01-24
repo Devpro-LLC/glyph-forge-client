@@ -67,4 +67,8 @@ Or from the command line:
 Next Steps
 ----------
 
-After installation, proceed to the :doc:`quickstart` guide to learn how to use Glyph Forge.
+After installation, you can:
+
+1. Learn the fundamentals in the :doc:`how_to_use` guide (recommended for beginners)
+2. Jump straight to the :doc:`quickstart` guide for a quick walkthrough
+3. Review the :doc:`authentication` guide if you need API access

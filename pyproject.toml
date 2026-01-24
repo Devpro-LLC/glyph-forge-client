@@ -14,14 +14,16 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "httpx>=0.25.0",
+  "lxml>=5.2,<6.0",
+  "python-docx>=1.1,<2.0",
 ]
 classifiers = [
   "Programming Language :: Python :: 3",
-  "License :: Other/Proprietary License",
+  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
 ]
-license = { text = "Glyph Client License Agreement" }
-license-files = ["LICEN[CS]E*"]
+license = { text = "Apache-2.0" }
+license-files = ["LICENSE"]
 
 [project.optional-dependencies]
 test = [
@@ -42,24 +44,28 @@ Issues = "https://github.com/Devpro-LLC/glyph-forge-client/issues"
 Source = "https://github.com/Devpro-LLC/glyph-forge-client"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/glyph_forge"]
+packages = ["src/glyph_forge", "sdk/src/glyph"]
 artifacts = [
   "src/glyph_forge/core/workspace/**/*.py",
+  "sdk/src/glyph/**/*.py",
 ]
 
 [tool.hatch.build.targets.sdist]
 include = [
     "src/glyph_forge",
+    "sdk/src/glyph",
     "scripts/prepare_build.py",
     "hatch_build.py",
     "README.md",
     "LICENSE",
+    "NOTICE",
     "pyproject.toml",
-    "sdk/src/glyph/core/workspace"
+    ".gitmodules",
 ]
 
 [tool.hatch.build.sources]
 glyph_forge = "src/glyph_forge"
+glyph = "sdk/src/glyph"
 
 [project.scripts]
 glyph = "glyph_forge.cli:main"

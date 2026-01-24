@@ -24,10 +24,18 @@ def copy_workspace_module():
 
     # Check if source exists
     if not source.exists():
-        print(f"ERROR: Source directory not found: {source}", file=sys.stderr)
-        print("Make sure the workspace submodule is initialized:", file=sys.stderr)
-        print("  git submodule update --init --recursive", file=sys.stderr)
-        sys.exit(1)
+        # If destination already exists (files committed to repo), skip copying
+        if destination.exists():
+            print(f"Source not found, but destination already exists: {destination}")
+            print("Using workspace files already in repository (no copy needed)")
+            copied_files = list(destination.rglob("*.py"))
+            print(f"Found {len(copied_files)} Python files in existing workspace")
+            return True
+        else:
+            print(f"ERROR: Source directory not found: {source}", file=sys.stderr)
+            print("Make sure the workspace submodule is initialized:", file=sys.stderr)
+            print("  git submodule update --init --recursive", file=sys.stderr)
+            sys.exit(1)
 
     # Remove existing destination if it exists
     if destination.exists():

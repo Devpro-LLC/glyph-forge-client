@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 # Public API from your redesigned workspace package
-from glyph_forge.core.workspace import (
+from glyph.core.workspace import (
     create_workspace,
     create_engine,
     WorkspaceConfig,
@@ -23,7 +23,7 @@ USE_CLIENT = False  # flip to True to call your FastAPI instead of local SDK
 if USE_CLIENT:
     cfg = WorkspaceConfig(
         mode="client",
-        api_base=os.getenv("GLYPH_API_BASE", "https://dev.glyphapi.ai"),
+        api_base=os.getenv("GLYPH_API_BASE", "https://api.glyphapi.ai"),
         api_key=os.getenv("GLYPH_API_KEY", None),
     )
 else:
