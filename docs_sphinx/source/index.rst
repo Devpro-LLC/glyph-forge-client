@@ -85,7 +85,9 @@ Table of Contents
    user_guide/quickstart
    user_guide/authentication
    user_guide/workspace
-   user_guide/detection_and_chunking
+   user_guide/cli
+   user_guide/markup
+   user_guide/images
 
 .. toctree::
    :maxdepth: 2
@@ -97,12 +99,19 @@ Table of Contents
 
 .. toctree::
    :maxdepth: 2
+   :caption: Reference
+
+   reference/styles
+
+.. toctree::
+   :maxdepth: 2
    :caption: Examples
 
    examples/basic_usage
    examples/bulk_processing
    examples/compression
    examples/advanced
+   examples/images
 
 .. toctree::
    :maxdepth: 1
