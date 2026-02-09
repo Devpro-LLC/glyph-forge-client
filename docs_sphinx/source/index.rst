@@ -21,8 +21,11 @@ Features
 
 - **Schema Building**: Build schemas from DOCX templates
 - **Schema Running**: Generate documents from schemas and plaintext
+- **Inline Markup**: Style text directly with ``$glyph`` blocks and ``[utilities]text[/]`` inline syntax
 - **Bulk Processing**: Process multiple documents in parallel
 - **Schema Compression**: Optimize schemas by deduplicating pattern descriptors
+- **Form Detection**: Detect headings, lists, tables, and other heuristic forms in plaintext
+- **Document Chunking**: Split plaintext or DOCX into heading-bounded chunks for LLM workflows
 - **Plaintext Processing**: Intake and normalize plaintext content
 - **Workspace Management**: Organize inputs, outputs, and artifacts
 - **Type Safety**: Full type hints for better IDE support
@@ -78,9 +81,11 @@ Table of Contents
    user_guide/installation
    user_guide/how_to_use
    user_guide/style_reference
+   user_guide/markup_reference
    user_guide/quickstart
    user_guide/authentication
    user_guide/workspace
+   user_guide/detection_and_chunking
 
 .. toctree::
    :maxdepth: 2

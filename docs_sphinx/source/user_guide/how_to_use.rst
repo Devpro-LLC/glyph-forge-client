@@ -7,7 +7,15 @@ Quick Start
 Introduction
 ~~~~~~~~~~~~
 
-Glyph is a LLM to DOCX Framework inspired by HTML, CSS, and Tailwind design patterns. While HTML uses elements and CSS uses "selectors", Glyph uses predefined heuristics that can be activated in the schema as a selector object. Glyph also offers Tailwind-inspired inline markup for layout-based compiling such as columns.
+Glyph is a LLM to DOCX Framework inspired by HTML, CSS, and Tailwind design patterns. While HTML uses elements and CSS uses "selectors", Glyph uses predefined heuristics that can be activated in the schema as a selector object.
+
+Glyph also offers **Tailwind-inspired inline markup** for styling content directly in plaintext:
+
+- **Block markup**: ``$glyph-{utilities}`` wraps entire paragraphs with styling
+- **Inline markup**: ``[utilities]text[/]`` styles specific words or phrases within a line
+- **Line breaks**: ``[/br]`` inserts a soft return within a paragraph
+
+For the complete markup syntax reference, see :doc:`markup_reference`.
 
 Heuristics and Styles Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -356,6 +364,8 @@ Next Steps
 Now that you understand the basics of Glyph selectors and patterns, you can:
 
 1. Check the :doc:`style_reference` for a complete list of all supported style properties
-2. Review the :doc:`../api/client` for detailed API documentation
-3. Explore more examples in the :doc:`../examples/basic_usage` section
-4. Learn about advanced features in the :doc:`quickstart` guide
+2. Learn about :doc:`markup_reference` for inline markup syntax (``$glyph`` blocks and ``[utilities]text[/]``)
+3. Use :doc:`detection_and_chunking` to detect forms and chunk documents for LLM workflows
+4. Review the :doc:`../api/client` for detailed API documentation
+5. Explore more examples in the :doc:`../examples/basic_usage` section
+6. Learn about advanced features in the :doc:`quickstart` guide
