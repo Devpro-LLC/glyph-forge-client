@@ -1,13 +1,3 @@
-Detection, Chunking & Indexing
-===============================
-
-Glyph Forge includes heuristic-based form detection, document chunking, and document indexing features that help you pre-process content before sending it to an LLM. These tools reduce token usage, improve accuracy, and give you fine-grained control over which parts of a document get processed.
-
-.. contents:: Quick Navigation
-   :local:
-   :depth: 2
-
-
 Overview
 --------
 
