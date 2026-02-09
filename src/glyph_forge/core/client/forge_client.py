@@ -1059,6 +1059,502 @@ class ForgeClient:
                 endpoint="/chunk/docx",
             ) from e
 
+    # ------------------------------------------------------------------
+    # Document Indexing
+    # ------------------------------------------------------------------
+
+    def index_document(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        text: str,
+        section_forms: Optional[List[str]] = None,
+        annotate_forms: Optional[List[str]] = None,
+        threshold: float = 0.55,
+        use_context: bool = True,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Build a structured document index with heading-bounded sections
+        and optional form-annotated segments.
+
+        Combines heading detection (for section boundaries) with line
+        classification (for segment annotation) to produce an index
+        that lets you request specific form types AND get the content
+        between reference points.
+
+        Args:
+            ws: Workspace instance
+            text: Plaintext content to index
+            section_forms: Heading form codes that define section boundaries
+                           (e.g. ``["H-SHORT", "H-SECTION-N"]``).
+                           ``None`` uses all heading forms.
+            annotate_forms: Form codes to annotate as segments within sections
+                            (e.g. ``["L-BULLET", "T-ROW"]``).
+                            ``None`` skips classification entirely (faster).
+                            ``[]`` runs classification but matches nothing.
+            threshold: Minimum confidence score (0.0–1.0, default 0.55)
+            use_context: Use surrounding-line context for classification
+            save_as: Optional name to save result JSON in workspace
+
+        Returns:
+            Dict with keys ``sections``, ``preamble``, ``total_sections``,
+            ``total_lines``, ``headings_detected``, ``section_forms``,
+            ``annotate_forms``.
+
+        Example:
+            >>> result = client.index_document(
+            ...     ws,
+            ...     text=open("doc.txt").read(),
+            ...     annotate_forms=["L-BULLET", "T-ROW"],
+            ... )
+            >>> for sec in result["sections"]:
+            ...     print(sec["heading"]["text"], len(sec["segments"]), "segments")
+        """
+        logger.info(
+            f"Indexing document (text length={len(text)}, section_forms={section_forms}, "
+            f"annotate_forms={annotate_forms}, threshold={threshold})"
+        )
+
+        try:
+            from glyph.core.analysis.detectors.heuristics.heading_detector import detect_headings
+            from glyph.core.analysis.forms.headings import HeadingForm
+
+            lines = text.splitlines()
+
+            # Detect headings
+            detections = detect_headings(lines, threshold=threshold)
+
+            # Default section_forms to all HeadingForm values
+            if section_forms is None:
+                section_forms = [f.value for f in HeadingForm]
+
+            # Filter detections by section_forms
+            detections = [
+                d for d in detections
+                if d.form is not None and d.form.value in section_forms
+            ]
+
+            # Optionally classify lines for segment annotation
+            classifications = None
+            if annotate_forms is not None:
+                from glyph.core.analysis.plaintext.classifier import classify_lines
+                classifications = classify_lines(lines, use_context=use_context)
+
+            # Build section boundaries
+            heading_indices = [d.line_idx for d in detections]
+            detection_map = {d.line_idx: d for d in detections}
+
+            # Helper: group contiguous lines matching annotate_forms into segments
+            def _build_segments(start: int, end: int) -> List[Dict[str, Any]]:
+                if classifications is None or annotate_forms is None:
+                    return []
+                segments: List[Dict[str, Any]] = []
+                current_form: Optional[str] = None
+                seg_start: int = 0
+                seg_lines: List[str] = []
+
+                for idx in range(start, end):
+                    c = classifications[idx]
+                    if c.pattern_type in annotate_forms and c.score >= threshold:
+                        if c.pattern_type == current_form:
+                            # Extend current segment
+                            seg_lines.append(c.text)
+                        else:
+                            # Close previous segment if any
+                            if current_form is not None:
+                                segments.append({
+                                    "form": current_form,
+                                    "span": {"start": seg_start, "end": idx - 1},
+                                    "content": "\n".join(seg_lines),
+                                    "count": len(seg_lines),
+                                })
+                            # Start new segment
+                            current_form = c.pattern_type
+                            seg_start = idx
+                            seg_lines = [c.text]
+                    else:
+                        # Non-matching line closes current segment
+                        if current_form is not None:
+                            segments.append({
+                                "form": current_form,
+                                "span": {"start": seg_start, "end": idx - 1},
+                                "content": "\n".join(seg_lines),
+                                "count": len(seg_lines),
+                            })
+                            current_form = None
+                            seg_lines = []
+
+                # Finalize trailing segment
+                if current_form is not None:
+                    segments.append({
+                        "form": current_form,
+                        "span": {"start": seg_start, "end": end - 1},
+                        "content": "\n".join(seg_lines),
+                        "count": len(seg_lines),
+                    })
+
+                return segments
+
+            # Build sections and preamble
+            sections: List[Dict[str, Any]] = []
+            preamble: Dict[str, Any]
+
+            if not heading_indices:
+                # No headings — everything goes to preamble
+                preamble_text = "\n".join(lines)
+                preamble = {
+                    "span": {"start": 0, "end": len(lines)},
+                    "content": preamble_text if preamble_text.strip() else "",
+                    "segments": _build_segments(0, len(lines)),
+                }
+            else:
+                # Preamble before first heading
+                first_h = heading_indices[0]
+                if first_h > 0:
+                    preamble_text = "\n".join(lines[:first_h])
+                    preamble = {
+                        "span": {"start": 0, "end": first_h},
+                        "content": preamble_text if preamble_text.strip() else "",
+                        "segments": _build_segments(0, first_h),
+                    }
+                else:
+                    preamble = {
+                        "span": {"start": 0, "end": 0},
+                        "content": "",
+                        "segments": [],
+                    }
+
+                # Each heading starts a section
+                for i, h_idx in enumerate(heading_indices):
+                    end_idx = heading_indices[i + 1] if i + 1 < len(heading_indices) else len(lines)
+                    det = detection_map[h_idx]
+                    section_lines = lines[h_idx:end_idx]
+                    sections.append({
+                        "section_id": f"sec_{i}",
+                        "heading": {
+                            "text": det.clean_text or lines[h_idx],
+                            "form": det.form.value if det.form else None,
+                            "line": h_idx,
+                            "score": det.score,
+                            "level": det.level,
+                            "numbering": det.numbering,
+                        },
+                        "span": {"start": h_idx, "end": end_idx},
+                        "content": "\n".join(section_lines),
+                        "segments": _build_segments(h_idx, end_idx),
+                    })
+
+            result: Dict[str, Any] = {
+                "sections": sections,
+                "preamble": preamble,
+                "total_sections": len(sections),
+                "total_lines": len(lines),
+                "headings_detected": len(detections),
+                "section_forms": section_forms,
+                "annotate_forms": annotate_forms,
+            }
+
+            if save_as:
+                try:
+                    ws.save_json("output_configs", save_as, result)
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save index result: {e}",
+                        endpoint="/index/document",
+                    ) from e
+
+            logger.info(
+                f"Document indexing complete: {len(sections)} sections, "
+                f"{len(lines)} lines, {len(detections)} headings"
+            )
+            return result
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to index document: {e}",
+                endpoint="/index/document",
+            ) from e
+
+    def index_document_file(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        file_path: str,
+        section_forms: Optional[List[str]] = None,
+        annotate_forms: Optional[List[str]] = None,
+        threshold: float = 0.55,
+        use_context: bool = True,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Build a structured document index from a plaintext file.
+
+        Reads the file and delegates to :meth:`index_document`.
+
+        Args:
+            ws: Workspace instance
+            file_path: Path to plaintext file
+            section_forms: Heading form codes for section boundaries
+            annotate_forms: Form codes to annotate as segments
+            threshold: Minimum confidence score
+            use_context: Use surrounding-line context
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Same dict as :meth:`index_document`
+        """
+        file_abs = Path(file_path).resolve()
+        if not file_abs.exists():
+            raise ForgeClientError(f"File not found: {file_abs}", endpoint="/index/document")
+        if not file_abs.is_file():
+            raise ForgeClientError(f"Not a file: {file_abs}", endpoint="/index/document")
+
+        try:
+            with open(file_abs, "r", encoding="utf-8") as f:
+                text = f.read()
+            return self.index_document(
+                ws, text=text, section_forms=section_forms,
+                annotate_forms=annotate_forms, threshold=threshold,
+                use_context=use_context, save_as=save_as,
+            )
+        except ForgeClientError:
+            raise
+        except OSError as e:
+            raise ForgeClientError(
+                f"Failed to read file {file_abs}: {e}",
+                endpoint="/index/document",
+            ) from e
+
+    def index_docx(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        docx_path: str,
+        section_forms: Optional[List[str]] = None,
+        annotate_forms: Optional[List[str]] = None,
+        threshold: float = 0.55,
+        use_context: bool = True,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Build a structured document index from a DOCX file.
+
+        Extracts paragraph text from the DOCX, detects headings for
+        section boundaries, and optionally annotates segments within
+        each section.
+
+        Args:
+            ws: Workspace instance
+            docx_path: Path to DOCX file
+            section_forms: Heading form codes for section boundaries
+            annotate_forms: Form codes to annotate as segments
+            threshold: Minimum confidence score (default 0.55)
+            use_context: Use surrounding-line context
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Dict with keys ``sections``, ``preamble``, ``total_sections``,
+            ``total_paragraphs``, ``headings_detected``, ``section_forms``,
+            ``annotate_forms``.
+
+        Example:
+            >>> result = client.index_docx(
+            ...     ws,
+            ...     docx_path="report.docx",
+            ...     annotate_forms=["L-BULLET", "T-ROW"],
+            ... )
+        """
+        logger.info(f"Indexing DOCX: {docx_path}, threshold={threshold}")
+
+        docx_abs = Path(docx_path).resolve()
+        if not docx_abs.exists():
+            raise ForgeClientError(f"DOCX file not found: {docx_abs}", endpoint="/index/docx")
+        if not docx_abs.is_file():
+            raise ForgeClientError(f"Not a file: {docx_abs}", endpoint="/index/docx")
+
+        try:
+            # Intake DOCX to extract document.xml
+            intake_result = intake_docx(docx_abs, ws)
+            document_xml = intake_result.key_files.get("document_xml")
+            if not document_xml:
+                raise ForgeClientError(
+                    "Failed to extract document.xml from DOCX",
+                    endpoint="/index/docx",
+                )
+
+            # Parse paragraph texts from document.xml
+            from xml.etree import ElementTree as ET
+
+            ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+            tree = ET.parse(str(document_xml))
+            root = tree.getroot()
+            body = root.find("w:body", ns)
+            if body is None:
+                raise ForgeClientError(
+                    "No <w:body> found in document.xml",
+                    endpoint="/index/docx",
+                )
+
+            paragraphs: List[str] = []
+            for p_elem in body.findall("w:p", ns):
+                runs = p_elem.findall(".//w:r/w:t", ns)
+                text = "".join(r.text or "" for r in runs)
+                paragraphs.append(text)
+
+            # Detect headings
+            from glyph.core.analysis.detectors.heuristics.heading_detector import detect_headings
+            from glyph.core.analysis.forms.headings import HeadingForm
+
+            detections = detect_headings(paragraphs, threshold=threshold)
+
+            # Default section_forms to all HeadingForm values
+            if section_forms is None:
+                section_forms = [f.value for f in HeadingForm]
+
+            # Filter detections by section_forms
+            detections = [
+                d for d in detections
+                if d.form is not None and d.form.value in section_forms
+            ]
+
+            # Optionally classify for segment annotation
+            classifications = None
+            if annotate_forms is not None:
+                from glyph.core.analysis.plaintext.classifier import classify_lines
+                classifications = classify_lines(paragraphs, use_context=use_context)
+
+            # Build section boundaries
+            heading_indices = [d.line_idx for d in detections]
+            detection_map = {d.line_idx: d for d in detections}
+
+            # Helper: group contiguous paragraphs matching annotate_forms
+            def _build_segments(start: int, end: int) -> List[Dict[str, Any]]:
+                if classifications is None or annotate_forms is None:
+                    return []
+                segments: List[Dict[str, Any]] = []
+                current_form: Optional[str] = None
+                seg_start: int = 0
+                seg_lines: List[str] = []
+
+                for idx in range(start, end):
+                    c = classifications[idx]
+                    if c.pattern_type in annotate_forms and c.score >= threshold:
+                        if c.pattern_type == current_form:
+                            seg_lines.append(c.text)
+                        else:
+                            if current_form is not None:
+                                segments.append({
+                                    "form": current_form,
+                                    "span": {"start": seg_start, "end": idx - 1},
+                                    "content": "\n".join(seg_lines),
+                                    "count": len(seg_lines),
+                                })
+                            current_form = c.pattern_type
+                            seg_start = idx
+                            seg_lines = [c.text]
+                    else:
+                        if current_form is not None:
+                            segments.append({
+                                "form": current_form,
+                                "span": {"start": seg_start, "end": idx - 1},
+                                "content": "\n".join(seg_lines),
+                                "count": len(seg_lines),
+                            })
+                            current_form = None
+                            seg_lines = []
+
+                if current_form is not None:
+                    segments.append({
+                        "form": current_form,
+                        "span": {"start": seg_start, "end": end - 1},
+                        "content": "\n".join(seg_lines),
+                        "count": len(seg_lines),
+                    })
+
+                return segments
+
+            # Build sections and preamble
+            sections: List[Dict[str, Any]] = []
+            preamble: Dict[str, Any]
+
+            if not heading_indices:
+                preamble_text = "\n".join(paragraphs)
+                preamble = {
+                    "span": {"start": 0, "end": len(paragraphs)},
+                    "content": preamble_text if preamble_text.strip() else "",
+                    "segments": _build_segments(0, len(paragraphs)),
+                }
+            else:
+                first_h = heading_indices[0]
+                if first_h > 0:
+                    preamble_text = "\n".join(paragraphs[:first_h])
+                    preamble = {
+                        "span": {"start": 0, "end": first_h},
+                        "content": preamble_text if preamble_text.strip() else "",
+                        "segments": _build_segments(0, first_h),
+                    }
+                else:
+                    preamble = {
+                        "span": {"start": 0, "end": 0},
+                        "content": "",
+                        "segments": [],
+                    }
+
+                for i, h_idx in enumerate(heading_indices):
+                    end_idx = heading_indices[i + 1] if i + 1 < len(heading_indices) else len(paragraphs)
+                    det = detection_map[h_idx]
+                    section_paras = paragraphs[h_idx:end_idx]
+                    sections.append({
+                        "section_id": f"sec_{i}",
+                        "heading": {
+                            "text": det.clean_text or paragraphs[h_idx],
+                            "form": det.form.value if det.form else None,
+                            "line": h_idx,
+                            "score": det.score,
+                            "level": det.level,
+                            "numbering": det.numbering,
+                        },
+                        "span": {"start": h_idx, "end": end_idx},
+                        "content": "\n".join(section_paras),
+                        "segments": _build_segments(h_idx, end_idx),
+                    })
+
+            result: Dict[str, Any] = {
+                "sections": sections,
+                "preamble": preamble,
+                "total_sections": len(sections),
+                "total_paragraphs": len(paragraphs),
+                "headings_detected": len(detections),
+                "section_forms": section_forms,
+                "annotate_forms": annotate_forms,
+            }
+
+            if save_as:
+                try:
+                    ws.save_json("output_configs", save_as, result)
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save index result: {e}",
+                        endpoint="/index/docx",
+                    ) from e
+
+            logger.info(
+                f"DOCX indexing complete: {len(sections)} sections, "
+                f"{len(paragraphs)} paragraphs, {len(detections)} headings"
+            )
+            return result
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to index DOCX: {e}",
+                endpoint="/index/docx",
+            ) from e
+
     def ask(
         self,
         *,

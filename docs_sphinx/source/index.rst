@@ -26,6 +26,7 @@ Features
 - **Schema Compression**: Optimize schemas by deduplicating pattern descriptors
 - **Form Detection**: Detect headings, lists, tables, and other heuristic forms in plaintext
 - **Document Chunking**: Split plaintext or DOCX into heading-bounded chunks for LLM workflows
+- **Document Indexing**: Build structured indexes with heading-bounded sections and form annotations
 - **Plaintext Processing**: Intake and normalize plaintext content
 - **Workspace Management**: Organize inputs, outputs, and artifacts
 - **Type Safety**: Full type hints for better IDE support
@@ -85,6 +86,7 @@ Table of Contents
    user_guide/quickstart
    user_guide/authentication
    user_guide/workspace
+   user_guide/detection_and_chunking
    user_guide/cli
    user_guide/markup
    user_guide/images

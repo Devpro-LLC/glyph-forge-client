@@ -1,7 +1,7 @@
-Detection & Chunking
-====================
+Detection, Chunking & Indexing
+===============================
 
-Glyph Forge includes heuristic-based form detection and document chunking features that help you pre-process content before sending it to an LLM. These tools reduce token usage, improve accuracy, and give you fine-grained control over which parts of a document get processed.
+Glyph Forge includes heuristic-based form detection, document chunking, and document indexing features that help you pre-process content before sending it to an LLM. These tools reduce token usage, improve accuracy, and give you fine-grained control over which parts of a document get processed.
 
 .. contents:: Quick Navigation
    :local:
@@ -11,12 +11,19 @@ Glyph Forge includes heuristic-based form detection and document chunking featur
 Overview
 --------
 
-Two complementary capabilities:
+Three complementary capabilities:
 
 1. **Form Detection** — classify each line of plaintext as a heading, list item, paragraph, table row, etc.
 2. **Document Chunking** — split plaintext or DOCX files into heading-bounded sections
+3. **Document Indexing** — build a structured index with heading-bounded sections *and* form-annotated segments within each section
 
-Both use the same heuristic engine under the hood and require no API calls — everything runs locally.
+All three use the same heuristic engine under the hood and require no API calls — everything runs locally.
+
+**When to use which:**
+
+- Use **Form Detection** when you need to know *what* each line is (classification only, no structure).
+- Use **Document Chunking** when you need to split a document into independent sections for per-section processing.
+- Use **Document Indexing** when you need both the section structure *and* the ability to locate and extract specific content types (bullet lists, table rows, etc.) within each section.
 
 
 Form Types
@@ -260,6 +267,168 @@ Chunk Return Value
    }
 
 
+Document Indexing
+-----------------
+
+Purpose
+~~~~~~~
+
+Form detection tells you *what* each line is, and chunking splits a document at heading boundaries — but neither gives you a structured view that combines both. If you want to answer "give me every bullet list in Section 3" or "extract all table rows under the Requirements heading," you need to do manual bookkeeping to correlate line classifications with section boundaries.
+
+**Document indexing closes that gap.** It builds a structured index where every heading-bounded **section** carries its own metadata (heading text, form, level, score, line span) *and* an array of **segments** — contiguous runs of a specific form type annotated within that section. Segments let you pinpoint exactly where bullet lists, table rows, ordered lists, or any other form type appear and pull their content directly.
+
+This is the plaintext equivalent of the XML agent's ``ChunkIndexer``: a single call gives you a navigable document map that you can use to build heuristic pre-processing pipelines — extracting exactly what you need before calling an LLM, reducing tokens, cost, and noise.
+
+**Key properties:**
+
+- Sections are bounded by headings (same algorithm as chunking)
+- Segments are contiguous runs of a single form type within a section
+- Blank lines break segments (two bullet groups separated by a blank → two segments)
+- Content before the first heading goes into a ``preamble`` object (not a section)
+- Setting ``annotate_forms=None`` skips classification entirely (faster — segments are ``[]``)
+- All processing is local, no API key required, runs in milliseconds
+
+When to Use Indexing
+~~~~~~~~~~~~~~~~~~~~
+
+Use ``index_document()`` instead of ``chunk_plaintext_text()`` when:
+
+- You need to **locate specific content types** within sections (e.g. "all bullets under Requirements")
+- You want **segment-level spans** so you can slice content by form type, not just by section
+- You're building a **pre-processing pipeline** that extracts structured data before sending it to an LLM
+- You need **heading metadata** (level, numbering, form) alongside section content in one call
+
+Use ``chunk_plaintext_text()`` when you only need to split a document into sections and don't care about what's inside each one.
+
+Basic Indexing
+~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from glyph_forge import ForgeClient, create_workspace
+
+   client = ForgeClient()
+   ws = create_workspace()
+
+   text = open("report.txt").read()
+   result = client.index_document(ws, text=text)
+
+   print(f"Found {result['total_sections']} sections")
+   for sec in result["sections"]:
+       print(f"  {sec['section_id']}: {sec['heading']['text']}")
+       print(f"    Lines {sec['span']['start']}-{sec['span']['end']}")
+
+Indexing with Annotations
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add segment annotations to identify contiguous runs of specific form types within each section:
+
+.. code-block:: python
+
+   result = client.index_document(
+       ws,
+       text=text,
+       annotate_forms=["L-BULLET", "T-ROW"],
+   )
+
+   for sec in result["sections"]:
+       print(f"\n{sec['heading']['text']}:")
+       for seg in sec["segments"]:
+           print(f"  {seg['form']}: {seg['count']} lines "
+                 f"(lines {seg['span']['start']}-{seg['span']['end']})")
+
+Selective Section Forms
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only split on specific heading types:
+
+.. code-block:: python
+
+   # Only treat H-SHORT and H-SECTION-N as section boundaries
+   result = client.index_document(
+       ws,
+       text=text,
+       section_forms=["H-SHORT", "H-SECTION-N"],
+       annotate_forms=["L-BULLET"],
+   )
+
+Indexing DOCX Files
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   result = client.index_docx(
+       ws,
+       docx_path="report.docx",
+       annotate_forms=["L-BULLET", "T-ROW"],
+   )
+
+   for sec in result["sections"]:
+       print(f"{sec['heading']['text']}: {len(sec['segments'])} segments")
+
+Selective Extraction
+~~~~~~~~~~~~~~~~~~~~~
+
+Use the index to extract only what you need before calling an LLM:
+
+.. code-block:: python
+
+   result = client.index_document(
+       ws,
+       text=text,
+       annotate_forms=["L-BULLET", "T-ROW"],
+   )
+
+   # Extract only bullet lists from each section
+   for sec in result["sections"]:
+       bullets = [s for s in sec["segments"] if s["form"] == "L-BULLET"]
+       if bullets:
+           print(f"Bullets in '{sec['heading']['text']}':")
+           for b in bullets:
+               print(b["content"])
+
+Index Return Value
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   {
+       "sections": [
+           {
+               "section_id": "sec_0",
+               "heading": {
+                   "text": "Introduction",
+                   "form": "H-SHORT",
+                   "line": 0,
+                   "score": 0.94,
+                   "level": 1,
+                   "numbering": None
+               },
+               "span": {"start": 0, "end": 15},
+               "content": "Introduction\nThis is the intro...",
+               "segments": [
+                   {
+                       "form": "L-BULLET",
+                       "span": {"start": 5, "end": 8},
+                       "content": "- First\n- Second\n- Third",
+                       "count": 3
+                   }
+               ]
+           }
+       ],
+       "preamble": {
+           "span": {"start": 0, "end": 0},
+           "content": "",
+           "segments": []
+       },
+       "total_sections": 1,
+       "total_lines": 15,
+       "headings_detected": 1,
+       "section_forms": ["H-SHORT", "H-LONG", "H-SECTION-N", "H-CONTENTS", "H-SUBTITLE"],
+       "annotate_forms": ["L-BULLET"]
+   }
+
+
 CLI Commands
 ------------
 
@@ -290,6 +459,26 @@ chunk
 
    # Filter heading forms for chunking
    glyph-forge chunk report.txt --heading-forms H-SHORT,H-SECTION-N
+
+index
+~~~~~
+
+.. code-block:: bash
+
+   # Index plaintext with all heading forms
+   glyph-forge index document.txt
+
+   # Index DOCX (auto-detected by extension)
+   glyph-forge index report.docx
+
+   # Annotate specific form types as segments
+   glyph-forge index document.txt --annotate-forms L-BULLET,T-ROW
+
+   # Filter section heading forms
+   glyph-forge index document.txt --section-forms H-SHORT,H-SECTION-N
+
+   # Verbose output with segment details
+   glyph-forge index document.txt --annotate-forms L-BULLET -v
 
 
 Use Cases
@@ -326,6 +515,35 @@ Use form detection to build a table of contents or outline:
    for c in result["classifications"]:
        print(f"  Line {c['line_index']}: {c['text']}")
 
+Targeted LLM Extraction with Indexing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use document indexing to extract only specific content types from each section, then send just those pieces to an LLM:
+
+.. code-block:: python
+
+   result = client.index_document(
+       ws,
+       text=full_document,
+       annotate_forms=["L-BULLET", "T-ROW"],
+   )
+
+   for sec in result["sections"]:
+       # Only process sections that contain bullet lists
+       bullets = [s for s in sec["segments"] if s["form"] == "L-BULLET"]
+       if bullets:
+           # Send only the bullet content — not the entire section
+           for seg in bullets:
+               summary = call_llm(f"Summarize these items:\n{seg['content']}")
+               print(f"{sec['heading']['text']}: {summary}")
+
+       # Extract table data separately
+       tables = [s for s in sec["segments"] if s["form"] == "T-ROW"]
+       if tables:
+           for seg in tables:
+               parsed = call_llm(f"Parse this table into JSON:\n{seg['content']}")
+               save_structured_data(sec["section_id"], parsed)
+
 Filtering Content by Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -347,5 +565,6 @@ See Also
 --------
 
 - :doc:`how_to_use` — Schema selectors and pattern matching (uses the same form types)
-- :doc:`../api/client` — Full API reference for all detection and chunking methods
+- :doc:`../api/client` — Full API reference for all detection, chunking, and indexing methods
+- :doc:`cli` — CLI reference for ``detect-forms``, ``chunk``, and ``index`` commands
 - :doc:`style_reference` — Style properties for schema-based formatting

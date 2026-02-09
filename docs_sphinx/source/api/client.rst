@@ -53,6 +53,13 @@ Chunking
 .. automethod:: ForgeClient.chunk_plaintext_file
 .. automethod:: ForgeClient.chunk_docx
 
+Document Indexing
+~~~~~~~~~~~~~~~~~
+
+.. automethod:: ForgeClient.index_document
+.. automethod:: ForgeClient.index_document_file
+.. automethod:: ForgeClient.index_docx
+
 Agent API
 ~~~~~~~~~
 
@@ -140,3 +147,33 @@ Schema Compression
 
    print(f"Reduced from {result['stats']['original_count']} "
          f"to {result['stats']['compressed_count']} pattern descriptors")
+
+Document Indexing
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # Index a document with section structure only
+   result = client.index_document(ws, text=open("report.txt").read())
+
+   for sec in result["sections"]:
+       print(f"{sec['heading']['text']} (lines {sec['span']['start']}-{sec['span']['end']})")
+
+   # Index with segment annotations for specific form types
+   result = client.index_document(
+       ws,
+       text=open("report.txt").read(),
+       annotate_forms=["L-BULLET", "T-ROW"],
+   )
+
+   for sec in result["sections"]:
+       for seg in sec["segments"]:
+           print(f"  {seg['form']}: {seg['count']} lines at {seg['span']}")
+
+   # Index a DOCX file
+   result = client.index_docx(
+       ws,
+       docx_path="report.docx",
+       annotate_forms=["L-BULLET"],
+       save_as="report_index",
+   )

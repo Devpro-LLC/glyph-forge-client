@@ -9,6 +9,7 @@ Usage:
     glyph-forge run <schema.json> <input.txt> [options]
     glyph-forge detect-forms <input.txt> [options]
     glyph-forge chunk <input> [options]
+    glyph-forge index <input> [options]
     glyph-forge ask <message> [options]
     glyph-forge --version
     glyph-forge --help
@@ -19,6 +20,7 @@ Commands:
     run              Run existing schema with plaintext input
     detect-forms     Detect heuristic forms (headings, lists, etc.) in plaintext
     chunk            Chunk document into heading-bounded sections
+    index            Build structured document index with sections and segments
     ask              Send a message to the Glyph Agent multi-agent system
 
 Options:
@@ -672,6 +674,126 @@ def cmd_chunk(args: argparse.Namespace) -> None:
         client.close()
 
 
+def cmd_index(args: argparse.Namespace) -> None:
+    """Execute index command."""
+    print_banner("Glyph Forge - Index")
+
+    input_path = Path(args.input).resolve()
+    if not input_path.exists():
+        print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
+        sys.exit(1)
+
+    # Parse form filters
+    section_forms = None
+    if args.section_forms:
+        section_forms = [f.strip() for f in args.section_forms.split(",")]
+
+    annotate_forms = None
+    if args.annotate_forms:
+        annotate_forms = [f.strip() for f in args.annotate_forms.split(",")]
+
+    # Create workspace
+    print("\n[1/2] Creating workspace...")
+    ws = create_workspace(
+        root_dir=args.output,
+        use_uuid=not args.no_uuid
+    )
+
+    # Detect file type and run appropriate indexer
+    print(f"\n[2/2] Indexing: {input_path.name}")
+    client = ForgeClient()
+    try:
+        is_docx = input_path.suffix.lower() == ".docx"
+        save_name = "index_result" if args.output != './glyph_workspace' else None
+
+        if is_docx:
+            print("  Mode: DOCX indexing")
+            result = client.index_docx(
+                ws,
+                docx_path=str(input_path),
+                section_forms=section_forms,
+                annotate_forms=annotate_forms,
+                threshold=args.threshold,
+                use_context=not args.no_context,
+                save_as=save_name,
+            )
+            total_label = "Total paragraphs"
+            total_value = result.get("total_paragraphs", "N/A")
+        else:
+            print("  Mode: Plaintext indexing")
+            result = client.index_document_file(
+                ws,
+                file_path=str(input_path),
+                section_forms=section_forms,
+                annotate_forms=annotate_forms,
+                threshold=args.threshold,
+                use_context=not args.no_context,
+                save_as=save_name,
+            )
+            total_label = "Total lines"
+            total_value = result.get("total_lines", "N/A")
+
+        print(f"\n  {total_label}:      {total_value}")
+        print(f"  Headings detected: {result['headings_detected']}")
+        print(f"  Sections:          {result['total_sections']}")
+
+        print("\n" + "-" * 70)
+        print(f"  {'SEC_ID':<10}  {'FORM':<15}  {'SCORE':>5}  {'LINES':>7}  {'HEADING':<25}  SEGMENTS")
+        print("-" * 70)
+        for sec in result["sections"]:
+            heading = sec["heading"]["text"][:25] or "(untitled)"
+            if len(sec["heading"]["text"]) > 25:
+                heading += "..."
+            form = sec["heading"]["form"] or "-"
+            score = f"{sec['heading']['score']:.2f}" if sec["heading"]["score"] else "-"
+            line_count = sec["span"]["end"] - sec["span"]["start"]
+            seg_count = len(sec["segments"])
+            print(f"  {sec['section_id']:<10}  {form:<15}  {score:>5}  {line_count:>7}  {heading:<25}  {seg_count}")
+
+        # Preamble info
+        preamble = result["preamble"]
+        if preamble["content"]:
+            p_lines = preamble["span"]["end"] - preamble["span"]["start"]
+            p_segs = len(preamble["segments"])
+            print(f"  {'(preamble)':<10}  {'-':<15}  {'    -':>5}  {p_lines:>7}  {'(before first heading)':<25}  {p_segs}")
+
+        print("-" * 70)
+
+        # Verbose: print segment detail per section
+        if args.verbose:
+            for sec in result["sections"]:
+                if sec["segments"]:
+                    print(f"\n  Segments in {sec['section_id']} ({sec['heading']['text'][:40]}):")
+                    for seg in sec["segments"]:
+                        preview = seg["content"][:50].replace("\n", " ")
+                        if len(seg["content"]) > 50:
+                            preview += "..."
+                        print(f"    {seg['form']:<20}  lines {seg['span']['start']}-{seg['span']['end']}  "
+                              f"({seg['count']} lines)  {preview}")
+            if preamble["segments"]:
+                print(f"\n  Segments in preamble:")
+                for seg in preamble["segments"]:
+                    preview = seg["content"][:50].replace("\n", " ")
+                    if len(seg["content"]) > 50:
+                        preview += "..."
+                    print(f"    {seg['form']:<20}  lines {seg['span']['start']}-{seg['span']['end']}  "
+                          f"({seg['count']} lines)  {preview}")
+
+        print()
+
+    except (ForgeClientError, ForgeClientIOError) as e:
+        print(f"\nERROR: {e}\n", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nUNEXPECTED ERROR: {e}\n", file=sys.stderr)
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+    finally:
+        client.close()
+
+
 def main() -> None:
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -808,6 +930,33 @@ def main() -> None:
         help='Comma-separated heading forms to split on (e.g. H-SHORT,H-SECTION-N)'
     )
 
+    # index command
+    parser_index = subparsers.add_parser(
+        'index',
+        parents=[common_args],
+        help='Build structured document index with sections and segments'
+    )
+    parser_index.add_argument('input', help='Path to input file (.docx or plaintext)')
+    parser_index.add_argument(
+        '--section-forms',
+        help='Comma-separated heading forms for section boundaries (e.g. H-SHORT,H-SECTION-N)'
+    )
+    parser_index.add_argument(
+        '--annotate-forms',
+        help='Comma-separated form codes to annotate as segments (e.g. L-BULLET,T-ROW)'
+    )
+    parser_index.add_argument(
+        '--threshold',
+        type=float,
+        default=0.55,
+        help='Minimum confidence threshold (default: 0.55)'
+    )
+    parser_index.add_argument(
+        '--no-context',
+        action='store_true',
+        help='Disable surrounding-line context for classification'
+    )
+
     # ask command
     parser_ask = subparsers.add_parser(
         'ask',
@@ -873,6 +1022,8 @@ def main() -> None:
         cmd_detect_forms(args)
     elif args.command == 'chunk':
         cmd_chunk(args)
+    elif args.command == 'index':
+        cmd_index(args)
 
 
 if __name__ == '__main__':
