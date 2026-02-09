@@ -148,6 +148,7 @@ for chunk in result["chunks"]:
 | **XML Agent** | Yes | Yes | Seconds | Direct DOCX XML modifications (beta) |
 | **Form Detection** | No | No | Milliseconds | Classify lines by heuristic form |
 | **Chunking** | No | No | Milliseconds | Split documents at heading boundaries |
+| **Indexing** | No | No | Milliseconds | Structured document index with sections and form-annotated segments |
 
 ---
 
@@ -225,6 +226,30 @@ headings = [c["text"] for c in result["classifications"]]
 # Use headings as a table of contents, outline, or navigation structure
 ```
 
+### Pattern 5: Index + Annotate (Structured Pre-Processing)
+
+Build a structured index of your document with heading-bounded sections and form-annotated segments. Extract exactly what you need before calling an LLM.
+
+```
+Document --> Index at headings --> Annotate segments --> Extract specific forms --> LLM
+             (milliseconds)       (milliseconds)        (filter by type)
+```
+
+```python
+result = client.index_document(
+    ws,
+    text=full_document,
+    annotate_forms=["L-BULLET", "T-ROW"],
+)
+
+for sec in result["sections"]:
+    bullets = [s for s in sec["segments"] if s["form"] == "L-BULLET"]
+    if bullets:
+        # Only send bullet content to LLM — reduces tokens and noise
+        for b in bullets:
+            llm_response = call_llm(b["content"])
+```
+
 ---
 
 ## Building a Workflow: Resume Builder Example
@@ -283,6 +308,10 @@ glyph-forge detect-forms document.txt --forms H-SHORT,L-BULLET
 # Chunk a document
 glyph-forge chunk report.txt
 glyph-forge chunk report.docx
+
+# Index a document with annotations
+glyph-forge index document.txt --annotate-forms L-BULLET,T-ROW
+glyph-forge index report.docx
 ```
 
 ## Documentation

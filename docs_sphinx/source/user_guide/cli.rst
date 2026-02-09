@@ -104,6 +104,51 @@ Run a schema to generate a DOCX document.
 * ``output_path``: Output DOCX file path (optional, prints debug if not provided)
 * ``source_override``: Override source DOCX path from schema (optional)
 
+index
+~~~~~
+
+Build a structured document index with heading-bounded sections and optional form-annotated segments.
+
+**Usage:**
+
+.. code-block:: bash
+
+   glyph-forge index <input> [--section-forms FORMS] [--annotate-forms FORMS]
+                              [--threshold N] [--no-context] [-o DIR] [-v]
+
+**Arguments:**
+
+* ``input`` **(required)**: Path to input file (``.docx`` or plaintext)
+* ``--section-forms``: Comma-separated heading forms for section boundaries (e.g. ``H-SHORT,H-SECTION-N``). Default: all heading forms.
+* ``--annotate-forms``: Comma-separated form codes to annotate as segments (e.g. ``L-BULLET,T-ROW``). Default: none (segments skipped for performance).
+* ``--threshold``: Minimum confidence threshold (default: 0.55)
+* ``--no-context``: Disable surrounding-line context for classification
+* ``-v, --verbose``: Show per-section segment details
+
+**Examples:**
+
+.. code-block:: bash
+
+   # Index a plaintext file (section structure only)
+   glyph-forge index report.txt
+
+   # Index with bullet and table annotations
+   glyph-forge index report.txt --annotate-forms L-BULLET,T-ROW
+
+   # Index a DOCX file (auto-detected by extension)
+   glyph-forge index report.docx
+
+   # Only split on short headings and numbered sections
+   glyph-forge index report.txt --section-forms H-SHORT,H-SECTION-N
+
+   # Verbose output with segment details
+   glyph-forge index report.txt --annotate-forms L-BULLET -v
+
+**Output:**
+
+The command prints a summary table of sections with their heading form, score, line count, and number of segments. With ``-v``, each section's segments are listed with their form type, line range, and a content preview.
+
+
 Workflow Examples
 -----------------
 
