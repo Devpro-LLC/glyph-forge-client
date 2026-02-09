@@ -7,6 +7,8 @@ Usage:
     glyph-forge build-and-run <template.docx> <input.txt> [options]
     glyph-forge build <template.docx> [options]
     glyph-forge run <schema.json> <input.txt> [options]
+    glyph-forge detect-forms <input.txt> [options]
+    glyph-forge chunk <input> [options]
     glyph-forge ask <message> [options]
     glyph-forge --version
     glyph-forge --help
@@ -15,6 +17,8 @@ Commands:
     build-and-run    Complete workflow: build schema + run with input
     build            Build schema from DOCX template only
     run              Run existing schema with plaintext input
+    detect-forms     Detect heuristic forms (headings, lists, etc.) in plaintext
+    chunk            Chunk document into heading-bounded sections
     ask              Send a message to the Glyph Agent multi-agent system
 
 Options:
@@ -527,6 +531,147 @@ def cmd_ask(args: argparse.Namespace) -> None:
         client.close()
 
 
+def cmd_detect_forms(args: argparse.Namespace) -> None:
+    """Execute detect-forms command."""
+    print_banner("Glyph Forge - Detect Forms")
+
+    input_path = Path(args.input).resolve()
+    if not input_path.exists():
+        print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
+        sys.exit(1)
+
+    # Parse forms filter
+    forms = None
+    if args.forms:
+        forms = [f.strip() for f in args.forms.split(",")]
+
+    # Create workspace
+    print("\n[1/2] Creating workspace...")
+    ws = create_workspace(
+        root_dir=args.output,
+        use_uuid=not args.no_uuid
+    )
+
+    # Run detection
+    print(f"\n[2/2] Detecting forms in: {input_path.name}")
+    client = ForgeClient()
+    try:
+        result = client.detect_forms_file(
+            ws,
+            file_path=str(input_path),
+            forms=forms,
+            threshold=args.threshold,
+            save_as="detect_forms_result" if args.output != './glyph_workspace' else None,
+        )
+
+        print(f"\n  Total lines:   {result['total_lines']}")
+        print(f"  Matched lines: {result['matched_lines']}")
+        print(f"  Threshold:     {result['threshold']}")
+        if forms:
+            print(f"  Filter:        {', '.join(forms)}")
+
+        print("\n" + "-" * 70)
+        print(f"  {'LINE':>5}  {'SCORE':>5}  {'FORM':<20}  TEXT")
+        print("-" * 70)
+        for c in result["classifications"]:
+            text_preview = c["text"][:45] + "..." if len(c["text"]) > 45 else c["text"]
+            print(f"  {c['line_index']:>5}  {c['score']:>5.2f}  {c['pattern_type']:<20}  {text_preview}")
+        print("-" * 70 + "\n")
+
+    except (ForgeClientError, ForgeClientIOError) as e:
+        print(f"\nERROR: {e}\n", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nUNEXPECTED ERROR: {e}\n", file=sys.stderr)
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+    finally:
+        client.close()
+
+
+def cmd_chunk(args: argparse.Namespace) -> None:
+    """Execute chunk command."""
+    print_banner("Glyph Forge - Chunk")
+
+    input_path = Path(args.input).resolve()
+    if not input_path.exists():
+        print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
+        sys.exit(1)
+
+    # Parse heading forms filter
+    heading_forms = None
+    if args.heading_forms:
+        heading_forms = [f.strip() for f in args.heading_forms.split(",")]
+
+    # Create workspace
+    print("\n[1/2] Creating workspace...")
+    ws = create_workspace(
+        root_dir=args.output,
+        use_uuid=not args.no_uuid
+    )
+
+    # Detect file type and run appropriate chunker
+    print(f"\n[2/2] Chunking: {input_path.name}")
+    client = ForgeClient()
+    try:
+        is_docx = input_path.suffix.lower() == ".docx"
+        save_name = "chunk_result" if args.output != './glyph_workspace' else None
+
+        if is_docx:
+            print("  Mode: DOCX chunking")
+            result = client.chunk_docx(
+                ws,
+                docx_path=str(input_path),
+                threshold=args.threshold,
+                save_as=save_name,
+            )
+            total_label = "Total paragraphs"
+            total_value = result.get("total_paragraphs", "N/A")
+        else:
+            print("  Mode: Plaintext chunking")
+            result = client.chunk_plaintext_file(
+                ws,
+                file_path=str(input_path),
+                threshold=args.threshold,
+                heading_forms=heading_forms,
+                save_as=save_name,
+            )
+            total_label = "Total lines"
+            total_value = result.get("total_lines", "N/A")
+
+        print(f"\n  {total_label}:      {total_value}")
+        print(f"  Headings detected: {result['headings_detected']}")
+        print(f"  Chunks:            {result['total_chunks']}")
+
+        print("\n" + "-" * 70)
+        print(f"  {'ID':<10}  {'FORM':<15}  {'SCORE':>5}  {'LINES':>7}  HEADING")
+        print("-" * 70)
+        for chunk in result["chunks"]:
+            heading = chunk["heading_text"][:40] or "(preamble)"
+            if len(chunk["heading_text"]) > 40:
+                heading += "..."
+            form = chunk["heading_form"] or "-"
+            score = f"{chunk['heading_score']:.2f}" if chunk["heading_score"] else "-"
+            # Compute line count from plaintext
+            line_count = chunk["plaintext"].count("\n") + 1 if chunk["plaintext"] else 0
+            print(f"  {chunk['chunk_id']:<10}  {form:<15}  {score:>5}  {line_count:>7}  {heading}")
+        print("-" * 70 + "\n")
+
+    except (ForgeClientError, ForgeClientIOError) as e:
+        print(f"\nERROR: {e}\n", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nUNEXPECTED ERROR: {e}\n", file=sys.stderr)
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+    finally:
+        client.close()
+
+
 def main() -> None:
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
@@ -627,6 +772,42 @@ def main() -> None:
         help='Name for output DOCX (default: output.docx)'
     )
 
+    # detect-forms command
+    parser_detect = subparsers.add_parser(
+        'detect-forms',
+        parents=[common_args],
+        help='Detect heuristic forms (headings, lists, etc.) in plaintext'
+    )
+    parser_detect.add_argument('input', help='Path to plaintext input file')
+    parser_detect.add_argument(
+        '--forms',
+        help='Comma-separated form codes to filter (e.g. H-SHORT,L-BULLET)'
+    )
+    parser_detect.add_argument(
+        '--threshold',
+        type=float,
+        default=0.55,
+        help='Minimum confidence threshold (default: 0.55)'
+    )
+
+    # chunk command
+    parser_chunk = subparsers.add_parser(
+        'chunk',
+        parents=[common_args],
+        help='Chunk document into heading-bounded sections'
+    )
+    parser_chunk.add_argument('input', help='Path to input file (.docx or plaintext)')
+    parser_chunk.add_argument(
+        '--threshold',
+        type=float,
+        default=0.55,
+        help='Heading detection threshold (default: 0.55)'
+    )
+    parser_chunk.add_argument(
+        '--heading-forms',
+        help='Comma-separated heading forms to split on (e.g. H-SHORT,H-SECTION-N)'
+    )
+
     # ask command
     parser_ask = subparsers.add_parser(
         'ask',
@@ -688,6 +869,10 @@ def main() -> None:
         cmd_run(args)
     elif args.command == 'ask':
         cmd_ask(args)
+    elif args.command == 'detect-forms':
+        cmd_detect_forms(args)
+    elif args.command == 'chunk':
+        cmd_chunk(args)
 
 
 if __name__ == '__main__':

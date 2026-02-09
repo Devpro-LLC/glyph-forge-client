@@ -130,5 +130,6 @@ Next Steps
 
 - Learn about :doc:`authentication` options
 - Explore :doc:`workspace` management features
+- Read the :doc:`markup_reference` for inline styling syntax (``[bold]text[/]``, ``$glyph`` blocks)
 - Check out the :doc:`../examples/basic_usage` examples
 - Review the :doc:`../api/client` API reference

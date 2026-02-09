@@ -40,6 +40,24 @@ Plaintext Intake
 .. automethod:: ForgeClient.intake_plaintext_text
 .. automethod:: ForgeClient.intake_plaintext_file
 
+Form Detection
+~~~~~~~~~~~~~~
+
+.. automethod:: ForgeClient.detect_forms
+.. automethod:: ForgeClient.detect_forms_file
+
+Chunking
+~~~~~~~~
+
+.. automethod:: ForgeClient.chunk_plaintext_text
+.. automethod:: ForgeClient.chunk_plaintext_file
+.. automethod:: ForgeClient.chunk_docx
+
+Agent API
+~~~~~~~~~
+
+.. automethod:: ForgeClient.ask
+
 Client Management
 ~~~~~~~~~~~~~~~~~
 

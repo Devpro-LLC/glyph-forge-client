@@ -1216,9 +1216,49 @@ When building a schema:
 5. Verify output in Word
 
 
+Inline Markup Equivalents
+-------------------------
+
+The font properties documented above can also be applied directly in plaintext using Glyph's inline markup syntax. This is useful when you want to style specific words without schema selectors.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Schema Property
+     - Block Markup
+     - Inline Markup
+   * - ``"bold": true``
+     - ``$glyph-bold``
+     - ``[bold]text[/]``
+   * - ``"italic": true``
+     - ``$glyph-italic``
+     - ``[italic]text[/]``
+   * - ``"size": 14``
+     - ``$glyph-font-size-14``
+     - ``[font-size-14]text[/]``
+   * - ``"color": "FF0000"``
+     - ``$glyph-color-FF0000``
+     - ``[color-FF0000]text[/]``
+   * - ``"highlight": "yellow"``
+     - ``$glyph-highlight-yellow``
+     - ``[highlight-yellow]text[/]``
+   * - ``"underline": true``
+     - ``$glyph-underline``
+     - ``[underline]text[/]``
+   * - ``"name": "Arial"``
+     - ``$glyph-font-name-arial``
+     - ``[font-name-arial]text[/]``
+
+Multiple inline utilities can be combined with commas: ``[bold,color-FF0000]text[/]``
+
+For the complete inline markup reference, see :doc:`markup_reference`.
+
+
 See Also
 --------
 
 - :doc:`how_to_use` - Complete guide to selectors and patterns
+- :doc:`markup_reference` - Inline markup syntax reference
 - :doc:`quickstart` - Get started quickly with examples
 - :doc:`../examples/basic_usage` - More usage examples

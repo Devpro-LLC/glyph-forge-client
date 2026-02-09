@@ -474,6 +474,7 @@ class ForgeClient:
         ws: Any,  # Workspace type
         *,
         text: str,
+        classify: bool = False,
         save_as: Optional[str] = None,
         **opts: Any,
     ) -> Dict[str, Any]:
@@ -483,6 +484,8 @@ class ForgeClient:
         Args:
             ws: Workspace instance
             text: Plaintext content to intake
+            classify: If True, run heuristic classification on each line
+                      (adds ``classifications`` key to the result)
             save_as: Optional name to save intake result JSON
             **opts: Additional options (unicode_form, strip_zero_width, etc.)
 
@@ -493,15 +496,25 @@ class ForgeClient:
             >>> result = client.intake_plaintext_text(
             ...     ws,
             ...     text="Sample text...",
+            ...     classify=True,
             ...     save_as="intake_result"
             ... )
         """
-        logger.info(f"Intaking plaintext (text length={len(text)}), save_as={save_as}")
+        logger.info(f"Intaking plaintext (text length={len(text)}, classify={classify}), save_as={save_as}")
 
         try:
             from glyph.core.utils.plaintext_intake import intake_plaintext
 
             result = intake_plaintext(text, **opts)
+
+            # Run heuristic classification if requested
+            if classify:
+                from glyph.core.analysis.plaintext.classifier import classify_lines as _classify_lines
+                import dataclasses
+                classifications = _classify_lines(result.lines)
+                object.__setattr__(result, "line_patterns", [
+                    dataclasses.asdict(c) for c in classifications
+                ])
 
             # Save to workspace if requested
             if save_as:
@@ -578,6 +591,472 @@ class ForgeClient:
             raise ForgeClientError(
                 f"Failed to read file {file_abs}: {e}",
                 endpoint="/plaintext/intake_file",
+            ) from e
+
+    # ------------------------------------------------------------------
+    # Form Detection
+    # ------------------------------------------------------------------
+
+    def detect_forms(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        text: str,
+        forms: Optional[List[str]] = None,
+        threshold: float = 0.55,
+        use_context: bool = True,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Detect heuristic forms (headings, lists, paragraphs, etc.) in plaintext.
+
+        Runs the SDK's line classifier against each line and returns
+        classifications filtered by form type and confidence threshold.
+
+        Args:
+            ws: Workspace instance
+            text: Plaintext content to classify
+            forms: Optional list of form codes to keep
+                   (e.g. ``["H-SHORT", "L-BULLET"]``). ``None`` returns all.
+            threshold: Minimum confidence score (0.0–1.0, default 0.55)
+            use_context: Use surrounding-line context for better accuracy
+            save_as: Optional name to save result JSON in workspace
+
+        Returns:
+            Dict with keys ``classifications``, ``total_lines``,
+            ``matched_lines``, ``forms_filter``, ``threshold``.
+
+        Example:
+            >>> result = client.detect_forms(
+            ...     ws,
+            ...     text=open("doc.txt").read(),
+            ...     forms=["H-SHORT", "L-BULLET"],
+            ... )
+            >>> for c in result["classifications"]:
+            ...     print(c["pattern_type"], c["text"][:60])
+        """
+        logger.info(
+            f"Detecting forms (text length={len(text)}, forms={forms}, "
+            f"threshold={threshold}, use_context={use_context})"
+        )
+
+        try:
+            from glyph.core.analysis.plaintext.classifier import classify_lines
+            import dataclasses
+
+            lines = text.splitlines()
+            raw = classify_lines(lines, use_context=use_context)
+
+            # Filter by threshold and form codes
+            matched = []
+            for c in raw:
+                if c.score < threshold:
+                    continue
+                if forms and c.pattern_type not in forms:
+                    continue
+                matched.append(dataclasses.asdict(c))
+
+            result: Dict[str, Any] = {
+                "classifications": matched,
+                "total_lines": len(lines),
+                "matched_lines": len(matched),
+                "forms_filter": forms,
+                "threshold": threshold,
+            }
+
+            if save_as:
+                try:
+                    ws.save_json("output_configs", save_as, result)
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save detect_forms result: {e}",
+                        endpoint="/detect/forms",
+                    ) from e
+
+            logger.info(f"Form detection complete: {len(matched)}/{len(lines)} lines matched")
+            return result
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to detect forms: {e}",
+                endpoint="/detect/forms",
+            ) from e
+
+    def detect_forms_file(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        file_path: str,
+        forms: Optional[List[str]] = None,
+        threshold: float = 0.55,
+        use_context: bool = True,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Detect heuristic forms in a plaintext file.
+
+        Reads the file and delegates to :meth:`detect_forms`.
+
+        Args:
+            ws: Workspace instance
+            file_path: Path to plaintext file
+            forms: Optional form-code filter list
+            threshold: Minimum confidence score
+            use_context: Use surrounding-line context
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Same dict as :meth:`detect_forms`
+        """
+        file_abs = Path(file_path).resolve()
+        if not file_abs.exists():
+            raise ForgeClientError(f"File not found: {file_abs}", endpoint="/detect/forms")
+        if not file_abs.is_file():
+            raise ForgeClientError(f"Not a file: {file_abs}", endpoint="/detect/forms")
+
+        try:
+            with open(file_abs, "r", encoding="utf-8") as f:
+                text = f.read()
+            return self.detect_forms(
+                ws, text=text, forms=forms, threshold=threshold,
+                use_context=use_context, save_as=save_as,
+            )
+        except ForgeClientError:
+            raise
+        except OSError as e:
+            raise ForgeClientError(
+                f"Failed to read file {file_abs}: {e}",
+                endpoint="/detect/forms",
+            ) from e
+
+    # ------------------------------------------------------------------
+    # Chunking
+    # ------------------------------------------------------------------
+
+    def chunk_plaintext_text(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        text: str,
+        threshold: float = 0.55,
+        heading_forms: Optional[List[str]] = None,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Split plaintext into heading-bounded chunks.
+
+        Runs heading detection on each line and splits the text at
+        heading boundaries so each chunk can be processed independently
+        (e.g. fed to an LLM one section at a time).
+
+        Args:
+            ws: Workspace instance
+            text: Plaintext content to chunk
+            threshold: Heading-detection confidence threshold (default 0.55)
+            heading_forms: Optional list of heading forms to split on
+                           (e.g. ``["H-SHORT", "H-SECTION-N"]``). ``None`` uses all.
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Dict with keys ``chunks`` (list), ``total_chunks``,
+            ``total_lines``, ``headings_detected``.
+
+        Example:
+            >>> result = client.chunk_plaintext_text(
+            ...     ws, text=open("doc.txt").read()
+            ... )
+            >>> for chunk in result["chunks"]:
+            ...     print(chunk["heading_text"], "->", len(chunk["plaintext"]), "chars")
+        """
+        logger.info(
+            f"Chunking plaintext (text length={len(text)}, threshold={threshold}, "
+            f"heading_forms={heading_forms})"
+        )
+
+        try:
+            from glyph.core.analysis.detectors.heuristics.heading_detector import detect_headings
+
+            lines = text.splitlines()
+            detections = detect_headings(lines, threshold=threshold)
+
+            # Filter by heading forms if specified
+            if heading_forms:
+                detections = [
+                    d for d in detections
+                    if d.form is not None and d.form.value in heading_forms
+                ]
+
+            # Build chunks from heading boundaries
+            chunks: List[Dict[str, Any]] = []
+            heading_indices = [d.line_idx for d in detections]
+            detection_map = {d.line_idx: d for d in detections}
+
+            # Determine split points
+            if not heading_indices:
+                # No headings — single preamble chunk
+                chunks.append({
+                    "chunk_id": "chunk_0",
+                    "heading_text": "",
+                    "heading_form": None,
+                    "heading_level": None,
+                    "heading_score": 0.0,
+                    "plaintext": text,
+                    "line_start": 0,
+                    "line_end": len(lines),
+                })
+            else:
+                # Preamble before first heading
+                if heading_indices[0] > 0:
+                    preamble_lines = lines[: heading_indices[0]]
+                    preamble_text = "\n".join(preamble_lines)
+                    if preamble_text.strip():
+                        chunks.append({
+                            "chunk_id": f"chunk_{len(chunks)}",
+                            "heading_text": "",
+                            "heading_form": None,
+                            "heading_level": None,
+                            "heading_score": 0.0,
+                            "plaintext": preamble_text,
+                            "line_start": 0,
+                            "line_end": heading_indices[0],
+                        })
+
+                # Each heading starts a new chunk
+                for i, h_idx in enumerate(heading_indices):
+                    end_idx = heading_indices[i + 1] if i + 1 < len(heading_indices) else len(lines)
+                    det = detection_map[h_idx]
+                    chunk_lines = lines[h_idx:end_idx]
+                    chunks.append({
+                        "chunk_id": f"chunk_{len(chunks)}",
+                        "heading_text": det.clean_text or lines[h_idx],
+                        "heading_form": det.form.value if det.form else None,
+                        "heading_level": det.level,
+                        "heading_score": det.score,
+                        "plaintext": "\n".join(chunk_lines),
+                        "line_start": h_idx,
+                        "line_end": end_idx,
+                    })
+
+            result: Dict[str, Any] = {
+                "chunks": chunks,
+                "total_chunks": len(chunks),
+                "total_lines": len(lines),
+                "headings_detected": len(detections),
+            }
+
+            if save_as:
+                try:
+                    ws.save_json("output_configs", save_as, result)
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save chunk result: {e}",
+                        endpoint="/chunk/text",
+                    ) from e
+
+            logger.info(f"Chunking complete: {len(chunks)} chunks from {len(lines)} lines")
+            return result
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to chunk plaintext: {e}",
+                endpoint="/chunk/text",
+            ) from e
+
+    def chunk_plaintext_file(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        file_path: str,
+        threshold: float = 0.55,
+        heading_forms: Optional[List[str]] = None,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Split a plaintext file into heading-bounded chunks.
+
+        Reads the file and delegates to :meth:`chunk_plaintext_text`.
+
+        Args:
+            ws: Workspace instance
+            file_path: Path to plaintext file
+            threshold: Heading-detection confidence threshold
+            heading_forms: Optional heading-form filter list
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Same dict as :meth:`chunk_plaintext_text`
+        """
+        file_abs = Path(file_path).resolve()
+        if not file_abs.exists():
+            raise ForgeClientError(f"File not found: {file_abs}", endpoint="/chunk/text")
+        if not file_abs.is_file():
+            raise ForgeClientError(f"Not a file: {file_abs}", endpoint="/chunk/text")
+
+        try:
+            with open(file_abs, "r", encoding="utf-8") as f:
+                text = f.read()
+            return self.chunk_plaintext_text(
+                ws, text=text, threshold=threshold,
+                heading_forms=heading_forms, save_as=save_as,
+            )
+        except ForgeClientError:
+            raise
+        except OSError as e:
+            raise ForgeClientError(
+                f"Failed to read file {file_abs}: {e}",
+                endpoint="/chunk/text",
+            ) from e
+
+    def chunk_docx(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        docx_path: str,
+        threshold: float = 0.55,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Chunk a DOCX document into heading-bounded sections.
+
+        Extracts paragraph text from the DOCX, detects headings via
+        heuristics, and splits into chunks. Each chunk includes the
+        heading metadata and the plaintext content of that section.
+
+        Args:
+            ws: Workspace instance
+            docx_path: Path to DOCX file
+            threshold: Heading-detection confidence threshold (default 0.55)
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Dict with keys ``chunks``, ``total_chunks``,
+            ``total_paragraphs``, ``headings_detected``.
+
+        Example:
+            >>> result = client.chunk_docx(ws, docx_path="report.docx")
+            >>> for chunk in result["chunks"]:
+            ...     print(chunk["heading_text"], "->", len(chunk["plaintext"]), "chars")
+        """
+        logger.info(f"Chunking DOCX: {docx_path}, threshold={threshold}")
+
+        docx_abs = Path(docx_path).resolve()
+        if not docx_abs.exists():
+            raise ForgeClientError(f"DOCX file not found: {docx_abs}", endpoint="/chunk/docx")
+        if not docx_abs.is_file():
+            raise ForgeClientError(f"Not a file: {docx_abs}", endpoint="/chunk/docx")
+
+        try:
+            # Intake DOCX to extract document.xml
+            intake_result = intake_docx(docx_abs, ws)
+            document_xml = intake_result.key_files.get("document_xml")
+            if not document_xml:
+                raise ForgeClientError(
+                    "Failed to extract document.xml from DOCX",
+                    endpoint="/chunk/docx",
+                )
+
+            # Parse paragraph texts from document.xml
+            from xml.etree import ElementTree as ET
+
+            ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+            tree = ET.parse(str(document_xml))
+            root = tree.getroot()
+            body = root.find("w:body", ns)
+            if body is None:
+                raise ForgeClientError(
+                    "No <w:body> found in document.xml",
+                    endpoint="/chunk/docx",
+                )
+
+            paragraphs: List[str] = []
+            for p_elem in body.findall("w:p", ns):
+                runs = p_elem.findall(".//w:r/w:t", ns)
+                text = "".join(r.text or "" for r in runs)
+                paragraphs.append(text)
+
+            # Detect headings
+            from glyph.core.analysis.detectors.heuristics.heading_detector import detect_headings
+            detections = detect_headings(paragraphs, threshold=threshold)
+
+            # Build chunks (same algorithm as chunk_plaintext_text)
+            chunks: List[Dict[str, Any]] = []
+            heading_indices = [d.line_idx for d in detections]
+            detection_map = {d.line_idx: d for d in detections}
+
+            if not heading_indices:
+                full_text = "\n".join(paragraphs)
+                chunks.append({
+                    "chunk_id": "chunk_0",
+                    "heading_text": "",
+                    "heading_form": None,
+                    "heading_level": None,
+                    "heading_score": 0.0,
+                    "plaintext": full_text,
+                    "paragraph_start": 0,
+                    "paragraph_end": len(paragraphs),
+                })
+            else:
+                if heading_indices[0] > 0:
+                    preamble = "\n".join(paragraphs[: heading_indices[0]])
+                    if preamble.strip():
+                        chunks.append({
+                            "chunk_id": f"chunk_{len(chunks)}",
+                            "heading_text": "",
+                            "heading_form": None,
+                            "heading_level": None,
+                            "heading_score": 0.0,
+                            "plaintext": preamble,
+                            "paragraph_start": 0,
+                            "paragraph_end": heading_indices[0],
+                        })
+
+                for i, h_idx in enumerate(heading_indices):
+                    end_idx = heading_indices[i + 1] if i + 1 < len(heading_indices) else len(paragraphs)
+                    det = detection_map[h_idx]
+                    chunk_text = "\n".join(paragraphs[h_idx:end_idx])
+                    chunks.append({
+                        "chunk_id": f"chunk_{len(chunks)}",
+                        "heading_text": det.clean_text or paragraphs[h_idx],
+                        "heading_form": det.form.value if det.form else None,
+                        "heading_level": det.level,
+                        "heading_score": det.score,
+                        "plaintext": chunk_text,
+                        "paragraph_start": h_idx,
+                        "paragraph_end": end_idx,
+                    })
+
+            result: Dict[str, Any] = {
+                "chunks": chunks,
+                "total_chunks": len(chunks),
+                "total_paragraphs": len(paragraphs),
+                "headings_detected": len(detections),
+            }
+
+            if save_as:
+                try:
+                    ws.save_json("output_configs", save_as, result)
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save chunk result: {e}",
+                        endpoint="/chunk/docx",
+                    ) from e
+
+            logger.info(
+                f"DOCX chunking complete: {len(chunks)} chunks "
+                f"from {len(paragraphs)} paragraphs"
+            )
+            return result
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to chunk DOCX: {e}",
+                endpoint="/chunk/docx",
             ) from e
 
     def ask(

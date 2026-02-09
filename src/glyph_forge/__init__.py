@@ -41,6 +41,13 @@ from glyph_forge.core.client import (
     ForgeClientHTTPError,
 )
 
+# Re-export form enums for detection & chunking
+from glyph.core.analysis.forms.headings import HeadingForm
+from glyph.core.analysis.forms.paragraphs import ParagraphForm
+from glyph.core.analysis.forms.lists import ListForm
+from glyph.core.analysis.forms.tables import TableForm
+from glyph.core.analysis.forms.callouts import CalloutForm
+
 __all__ = [
     # Client
     "ForgeClient",
@@ -52,6 +59,12 @@ __all__ = [
     "create_engine",
     "WorkspaceConfig",
     "Workspace",
+    # Form enums
+    "HeadingForm",
+    "ParagraphForm",
+    "ListForm",
+    "TableForm",
+    "CalloutForm",
     # Version
     "__version__",
 ]
