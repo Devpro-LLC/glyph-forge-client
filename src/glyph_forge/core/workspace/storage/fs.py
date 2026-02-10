@@ -32,11 +32,12 @@ class FilesystemWorkspace(WorkspaceBase):  # or just `object` if you haven't cre
         os.makedirs(self.root_dir, exist_ok=True)
 
         self.paths = {
-            "input_docx":      os.path.join(self.root_dir, "input", "docx"),
-            "input_plaintext": os.path.join(self.root_dir, "input", "plaintext"),
-            "input_unzipped":  os.path.join(self.root_dir, "input", "unzipped"),
-            "output_configs":  os.path.join(self.root_dir, "output", "configs"),
-            "output_docx":     os.path.join(self.root_dir, "output", "docx"),
+            "input_docx":       os.path.join(self.root_dir, "input", "docx"),
+            "input_plaintext":  os.path.join(self.root_dir, "input", "plaintext"),
+            "input_unzipped":   os.path.join(self.root_dir, "input", "unzipped"),
+            "output_configs":   os.path.join(self.root_dir, "output", "configs"),
+            "output_docx":      os.path.join(self.root_dir, "output", "docx"),
+            "output_plaintext": os.path.join(self.root_dir, "output", "plaintext"),
         }
         if custom_paths:
             self.paths.update(custom_paths)

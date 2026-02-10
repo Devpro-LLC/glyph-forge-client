@@ -13,6 +13,7 @@ PathKey = Literal[
     "input_unzipped",
     "output_configs",
     "output_docx",
+    "output_plaintext",
 ]
 
 PATH_KEYS: tuple[PathKey, ...] = (
@@ -21,6 +22,7 @@ PATH_KEYS: tuple[PathKey, ...] = (
     "input_unzipped",
     "output_configs",
     "output_docx",
+    "output_plaintext",
 )
 
 class PathMap(TypedDict):
@@ -29,6 +31,7 @@ class PathMap(TypedDict):
     input_unzipped: str
     output_configs: str
     output_docx: str
+    output_plaintext: str
 
 @dataclass(frozen=True)
 class PathRegistry:
@@ -38,6 +41,7 @@ class PathRegistry:
     input_unzipped: str
     output_configs: str
     output_docx: str
+    output_plaintext: str
 
     def as_dict(self) -> PathMap:
         return cast(PathMap, {
@@ -46,6 +50,7 @@ class PathRegistry:
             "input_unzipped": self.input_unzipped,
             "output_configs": self.output_configs,
             "output_docx": self.output_docx,
+            "output_plaintext": self.output_plaintext,
         })
 
 # ---- Base class: stores identity + validated paths; leaves I/O to concrete impls --
@@ -88,6 +93,7 @@ class WorkspaceBase(ABC):
             "input_unzipped": self._paths["input_unzipped"],
             "output_configs": self._paths["output_configs"],
             "output_docx": self._paths["output_docx"],
+            "output_plaintext": self._paths["output_plaintext"],
         })
         return PathRegistry(**pm)
 

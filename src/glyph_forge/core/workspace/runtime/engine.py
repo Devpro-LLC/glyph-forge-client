@@ -89,6 +89,22 @@ class GlyphEngine:
             options=options or {},
         )
 
+    def build_glyph(
+        self,
+        *,
+        docx_path: Optional[str] = None,
+        plaintext_path: Optional[str] = None,
+        options: Optional[Dict] = None
+    ) -> Dict:
+        """Build both schema and markup in one call."""
+        _ensure_file_exists(docx_path, "DOCX path")
+        _ensure_file_exists(plaintext_path, "Plaintext path")
+        return self._adapter.build_glyph(
+            docx_path=docx_path,
+            plaintext_path=plaintext_path,
+            options=options or {},
+        )
+
 
 class EngineAdapter(ABC):
     """
@@ -123,6 +139,16 @@ class EngineAdapter(ABC):
         self,
         *,
         plaintext_path: str,
+        options: Dict
+    ) -> Dict:
+        raise NotImplementedError
+
+    @abstractmethod
+    def build_glyph(
+        self,
+        *,
+        docx_path: Optional[str],
+        plaintext_path: Optional[str],
         options: Dict
     ) -> Dict:
         raise NotImplementedError

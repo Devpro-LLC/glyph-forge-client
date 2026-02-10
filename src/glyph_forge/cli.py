@@ -10,6 +10,7 @@ Usage:
     glyph-forge detect-forms <input.txt> [options]
     glyph-forge chunk <input> [options]
     glyph-forge index <input> [options]
+    glyph-forge target <input.txt> <prompt> [options]
     glyph-forge ask <message> [options]
     glyph-forge --version
     glyph-forge --help
@@ -21,6 +22,7 @@ Commands:
     detect-forms     Detect heuristic forms (headings, lists, etc.) in plaintext
     chunk            Chunk document into heading-bounded sections
     index            Build structured document index with sections and segments
+    target           Run prompt-based chunk targeting to select relevant sections
     ask              Send a message to the Glyph Agent multi-agent system
 
 Options:
@@ -674,6 +676,75 @@ def cmd_chunk(args: argparse.Namespace) -> None:
         client.close()
 
 
+def cmd_target(args: argparse.Namespace) -> None:
+    """Execute target command - run prompt-based chunk targeting."""
+    print_banner("Glyph Forge - Target")
+
+    input_path = Path(args.input).resolve()
+    if not input_path.exists():
+        print(f"ERROR: Input file not found: {input_path}", file=sys.stderr)
+        sys.exit(1)
+
+    # Create workspace
+    print("\n[1/2] Creating workspace...")
+    ws = create_workspace(
+        root_dir=args.output,
+        use_uuid=not args.no_uuid
+    )
+
+    # Run targeting
+    print(f"\n[2/2] Targeting: {input_path.name}")
+    print(f"  Prompt: {args.prompt[:80]}{'...' if len(args.prompt) > 80 else ''}")
+    print(f"  Threshold: {args.threshold}")
+    client = ForgeClient()
+    try:
+        save_name = "target_result" if args.output != './glyph_workspace' else None
+        result = client.target_chunks_file(
+            ws,
+            prompt=args.prompt,
+            file_path=str(input_path),
+            threshold=args.threshold,
+            save_as=save_name,
+        )
+
+        analysis = result["analysis"]
+        print(f"\n  Category:  {analysis['category']}")
+        print(f"  Strategy:  {result['strategy']}")
+        print(f"  Scope:     {analysis['scope']}")
+        print(f"  Selected:  {result['chunks_selected']} / {result['chunks_total']} chunks "
+              f"({result['token_savings']}% token savings)")
+
+        print("\n" + "-" * 70)
+        print(f"  {'ID':<12}{'SCORE':>6}   {'MATCHED BY':<20}HEADING")
+        print("-" * 70)
+
+        # Build set of selected chunk IDs for marking
+        selected_ids = {c.get("chunk_id") for c in result["selected_chunks"]}
+
+        for score_entry in result["all_scores"]:
+            chunk_id = score_entry["chunk_id"]
+            score = score_entry["score"]
+            matched_by = score_entry.get("matched_by", "none")
+            # Find heading from selected_chunks or all_scores metadata
+            heading = score_entry.get("metadata", {}).get("heading_text", "")
+            marker = " *" if chunk_id in selected_ids else ""
+            print(f"  {chunk_id:<12}{score:>5.2f}   {matched_by:<20}{heading[:30]}{marker}")
+
+        print("-" * 70 + "\n")
+
+    except (ForgeClientError, ForgeClientIOError) as e:
+        print(f"\nERROR: {e}\n", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nUNEXPECTED ERROR: {e}\n", file=sys.stderr)
+        if args.verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+    finally:
+        client.close()
+
+
 def cmd_index(args: argparse.Namespace) -> None:
     """Execute index command."""
     print_banner("Glyph Forge - Index")
@@ -930,6 +1001,21 @@ def main() -> None:
         help='Comma-separated heading forms to split on (e.g. H-SHORT,H-SECTION-N)'
     )
 
+    # target command
+    parser_target = subparsers.add_parser(
+        'target',
+        parents=[common_args],
+        help='Run prompt-based chunk targeting to select relevant sections'
+    )
+    parser_target.add_argument('input', help='Path to plaintext input file')
+    parser_target.add_argument('prompt', help='User modify request to classify')
+    parser_target.add_argument(
+        '--threshold',
+        type=float,
+        default=0.3,
+        help='Minimum relevance score for chunk selection (default: 0.3)'
+    )
+
     # index command
     parser_index = subparsers.add_parser(
         'index',
@@ -1022,6 +1108,8 @@ def main() -> None:
         cmd_detect_forms(args)
     elif args.command == 'chunk':
         cmd_chunk(args)
+    elif args.command == 'target':
+        cmd_target(args)
     elif args.command == 'index':
         cmd_index(args)
 

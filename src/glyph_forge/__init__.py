@@ -48,6 +48,14 @@ from glyph.core.analysis.forms.lists import ListForm
 from glyph.core.analysis.forms.tables import TableForm
 from glyph.core.analysis.forms.callouts import CalloutForm
 
+# Re-export targeting types (available when SDK includes targeting module)
+try:
+    from glyph.core.targeting import TargetingCategory, TargetingResult, PromptAnalysis
+except ImportError:
+    TargetingCategory = None  # type: ignore[assignment,misc]
+    TargetingResult = None  # type: ignore[assignment,misc]
+    PromptAnalysis = None  # type: ignore[assignment,misc]
+
 __all__ = [
     # Client
     "ForgeClient",
@@ -65,6 +73,10 @@ __all__ = [
     "ListForm",
     "TableForm",
     "CalloutForm",
+    # Targeting
+    "TargetingCategory",
+    "TargetingResult",
+    "PromptAnalysis",
     # Version
     "__version__",
 ]

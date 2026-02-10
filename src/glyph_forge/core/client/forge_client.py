@@ -214,6 +214,125 @@ class ForgeClient:
                 endpoint="/schema/build",
             ) from e
 
+    def build_glyph_from_docx(
+        self,
+        ws: Any,  # Workspace type from glyph.core.workspace
+        *,
+        docx_path: str,
+        save_as: Optional[str] = None,
+        include_artifacts: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Build both schema and markup from a DOCX file in one call.
+
+        Uses the local SDK to intake the DOCX, build the schema via
+        GlyphSchemaBuilder, then produce a .glyph.txt markup file via
+        GlyphMarkupBuilder (coordinated mode, no re-parsing).
+
+        Args:
+            ws: Workspace instance for saving artifacts
+            docx_path: Path to DOCX file (absolute or CWD-relative)
+            save_as: Optional base name to save schema JSON and markup
+                     (e.g. "my_doc" -> my_doc.json + my_doc.glyph.txt)
+            include_artifacts: If True, save tagged DOCX + unzipped files (default: False)
+
+        Returns:
+            Dict with keys:
+            - schema: The generated schema dict
+            - markup: The generated markup string
+            - schema_path: Path to saved schema JSON (if save_as provided)
+            - markup_path: Path to saved markup file (if save_as provided)
+
+        Raises:
+            ForgeClientError: File not found or processing error
+
+        Example:
+            >>> result = client.build_glyph_from_docx(
+            ...     ws,
+            ...     docx_path="sample.docx",
+            ...     save_as="my_schema"
+            ... )
+            >>> print(len(result["markup"]), "chars of markup")
+            >>> print(len(result["schema"].get("pattern_descriptors", [])), "descriptors")
+        """
+        logger.info(f"Building glyph from docx_path={docx_path}, save_as={save_as}")
+
+        # Resolve path to absolute
+        docx_abs = Path(docx_path).resolve()
+
+        if not docx_abs.exists():
+            raise ForgeClientError(
+                f"DOCX file not found: {docx_abs}",
+                endpoint="/glyph/build",
+            )
+
+        if not docx_abs.is_file():
+            raise ForgeClientError(
+                f"Not a file: {docx_abs}",
+                endpoint="/glyph/build",
+            )
+
+        try:
+            from glyph.core.build_glyph import GlyphBuilder
+
+            # Use SDK to intake and extract DOCX
+            intake_result = intake_docx(docx_abs, ws)
+
+            # Get document.xml path
+            document_xml = intake_result.key_files.get("document_xml")
+            if not document_xml:
+                raise ForgeClientError(
+                    f"Failed to extract document.xml from DOCX",
+                    endpoint="/glyph/build",
+                )
+
+            # Build schema + markup using GlyphBuilder
+            builder = GlyphBuilder(
+                document_xml_path=str(document_xml),
+                docx_extract_dir=str(intake_result.unzip_dir),
+                source_docx=str(intake_result.stored_docx_path),
+                tag=ws.tag if hasattr(ws, 'tag') else None,
+            )
+
+            result = builder.build(workspace=ws)
+
+            # Save artifacts if requested
+            schema_path = None
+            markup_path = None
+            if save_as:
+                try:
+                    saved = builder.save(result, workspace=ws)
+                    schema_path = saved.schema_path
+                    markup_path = saved.markup_path
+                    logger.info(f"Schema saved to {schema_path}")
+                    logger.info(f"Markup saved to {markup_path}")
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save build artifacts to workspace: {e}",
+                        endpoint="/glyph/build",
+                    ) from e
+
+            logger.info(
+                f"Glyph built successfully: "
+                f"{len(result.schema.get('pattern_descriptors', []))} pattern descriptors, "
+                f"{len(result.markup)} chars of markup"
+            )
+
+            return {
+                "schema": result.schema,
+                "markup": result.markup,
+                "schema_path": schema_path,
+                "markup_path": markup_path,
+            }
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to build glyph: {e}",
+                endpoint="/glyph/build",
+            ) from e
+
     def run_schema(
         self,
         ws: Any,  # Workspace type
@@ -911,6 +1030,158 @@ class ForgeClient:
                 endpoint="/chunk/text",
             ) from e
 
+    # ------------------------------------------------------------------
+    # Chunk Targeting
+    # ------------------------------------------------------------------
+
+    def target_chunks(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        prompt: str,
+        text: Optional[str] = None,
+        chunks: Optional[List[Dict[str, Any]]] = None,
+        threshold: float = 0.3,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Run prompt-based targeting on chunks to select only relevant sections.
+
+        Given a user modify request (prompt) and either raw text or pre-built
+        chunks, classifies the prompt intent and scores each chunk for
+        relevance. Returns the selected subset plus scoring metadata.
+
+        Args:
+            ws: Workspace instance
+            prompt: The user's modify request to classify
+            text: Raw plaintext to auto-chunk first (mutually exclusive with chunks)
+            chunks: Pre-built chunk dicts with ``plaintext`` or ``content`` key
+                    (mutually exclusive with text)
+            threshold: Minimum relevance score for selection (0.0–1.0, default 0.3)
+            save_as: Optional name to save result JSON in workspace
+
+        Returns:
+            Dict with keys ``analysis``, ``selected_chunks``, ``all_scores``,
+            ``strategy``, ``chunks_total``, ``chunks_selected``, ``token_savings``.
+
+        Raises:
+            ForgeClientError: If neither text nor chunks is provided, or processing fails
+
+        Example:
+            >>> result = client.target_chunks(
+            ...     ws,
+            ...     prompt="Format the abstract as a block quote",
+            ...     text=open("doc.txt").read(),
+            ... )
+            >>> print(f"Selected {result['chunks_selected']}/{result['chunks_total']} chunks")
+        """
+        if text is None and chunks is None:
+            raise ForgeClientError(
+                "Either 'text' or 'chunks' must be provided",
+                endpoint="/target/chunks",
+            )
+
+        logger.info(
+            f"Running chunk targeting (prompt={prompt[:80]!r}, "
+            f"threshold={threshold}, source={'text' if text else 'chunks'})"
+        )
+
+        try:
+            from glyph.core.targeting import run_targeting, build_chunks_from_plaintext
+
+            # Build chunks from text if needed
+            if text is not None:
+                sdk_chunks = build_chunks_from_plaintext(text)
+            else:
+                # Adapt ForgeClient chunks (plaintext → content) for SDK
+                sdk_chunks = []
+                for c in chunks:  # type: ignore[union-attr]
+                    adapted = dict(c)
+                    if "plaintext" in adapted and "content" not in adapted:
+                        adapted["content"] = adapted.pop("plaintext")
+                    sdk_chunks.append(adapted)
+
+            # Run the targeting pipeline
+            targeting_result = run_targeting(prompt, sdk_chunks, threshold=threshold)
+
+            # Compute token savings estimate (character-based proxy)
+            total_chars = sum(len(c.get("content", "")) for c in sdk_chunks)
+            selected_chars = sum(len(c.get("content", "")) for c in targeting_result.selected_chunks)
+            token_savings = round((1 - selected_chars / total_chars) * 100, 1) if total_chars > 0 else 0.0
+
+            result: Dict[str, Any] = {
+                **targeting_result.to_dict(),
+                "token_savings": token_savings,
+            }
+
+            if save_as:
+                try:
+                    ws.save_json("output_configs", save_as, result)
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save targeting result: {e}",
+                        endpoint="/target/chunks",
+                    ) from e
+
+            logger.info(
+                f"Targeting complete: {targeting_result.chunks_selected}/"
+                f"{targeting_result.chunks_total} chunks selected "
+                f"({token_savings}% token savings)"
+            )
+            return result
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to run chunk targeting: {e}",
+                endpoint="/target/chunks",
+            ) from e
+
+    def target_chunks_file(
+        self,
+        ws: Any,  # Workspace type
+        *,
+        prompt: str,
+        file_path: str,
+        threshold: float = 0.3,
+        save_as: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Run prompt-based targeting on a plaintext file.
+
+        Reads the file and delegates to :meth:`target_chunks`.
+
+        Args:
+            ws: Workspace instance
+            prompt: The user's modify request to classify
+            file_path: Path to plaintext file
+            threshold: Minimum relevance score for selection
+            save_as: Optional name to save result JSON
+
+        Returns:
+            Same dict as :meth:`target_chunks`
+        """
+        file_abs = Path(file_path).resolve()
+        if not file_abs.exists():
+            raise ForgeClientError(f"File not found: {file_abs}", endpoint="/target/chunks")
+        if not file_abs.is_file():
+            raise ForgeClientError(f"Not a file: {file_abs}", endpoint="/target/chunks")
+
+        try:
+            with open(file_abs, "r", encoding="utf-8") as f:
+                text = f.read()
+            return self.target_chunks(
+                ws, prompt=prompt, text=text, threshold=threshold, save_as=save_as,
+            )
+        except ForgeClientError:
+            raise
+        except OSError as e:
+            raise ForgeClientError(
+                f"Failed to read file {file_abs}: {e}",
+                endpoint="/target/chunks",
+            ) from e
+
     def chunk_docx(
         self,
         ws: Any,  # Workspace type
@@ -1568,6 +1839,7 @@ class ForgeClient:
         current_document: Optional[Dict[str, Any]] = None,
         real_time: bool = False,
         strict_validation: bool = False,
+        enable_targeting: bool = False,
     ) -> Dict[str, Any]:
         """
         Send a message to the Glyph Agent multi-agent system via API.
@@ -1591,6 +1863,9 @@ class ForgeClient:
             current_document: Legacy combined document state
             real_time: Enable real-time sandbox updates
             strict_validation: Enable strict validation mode
+            enable_targeting: If True and current_plaintext is provided, run
+                              local chunk targeting to reduce payload size
+                              before sending to the API (default: False)
 
         Returns:
             Dict containing:
@@ -1627,6 +1902,40 @@ class ForgeClient:
 
         logger.info(f"Sending message to /glyph_agent/ask: {message[:100]}...")
 
+        # Client-side targeting: reduce plaintext payload before sending
+        targeting_metadata: Optional[Dict[str, Any]] = None
+        if enable_targeting and current_plaintext:
+            try:
+                from glyph.core.targeting import run_targeting, build_chunks_from_plaintext
+
+                chunks = build_chunks_from_plaintext(current_plaintext)
+                targeting_result = run_targeting(message, chunks, threshold=0.3)
+
+                if (
+                    targeting_result.analysis.category != "full_document"
+                    and targeting_result.chunks_selected < targeting_result.chunks_total
+                ):
+                    # Replace plaintext with targeted subset
+                    targeted_text = "\n\n".join(
+                        c.get("content", "") for c in targeting_result.selected_chunks
+                    )
+                    original_len = len(current_plaintext)
+                    current_plaintext = targeted_text
+                    savings = round((1 - len(targeted_text) / original_len) * 100, 1) if original_len > 0 else 0.0
+                    targeting_metadata = {
+                        "category": targeting_result.analysis.category,
+                        "strategy": targeting_result.strategy,
+                        "chunks_total": targeting_result.chunks_total,
+                        "chunks_selected": targeting_result.chunks_selected,
+                        "token_savings_pct": savings,
+                    }
+                    logger.info(
+                        f"Targeting reduced payload: {targeting_result.chunks_selected}/"
+                        f"{targeting_result.chunks_total} chunks ({savings}% savings)"
+                    )
+            except Exception as e:
+                logger.warning(f"Client-side targeting failed, sending full plaintext: {e}")
+
         # Build request payload
         payload: Dict[str, Any] = {
             "message": message,
@@ -1645,6 +1954,8 @@ class ForgeClient:
             payload["current_schema"] = current_schema
         if current_plaintext:
             payload["current_plaintext"] = current_plaintext
+        if targeting_metadata:
+            payload["targeting_metadata"] = targeting_metadata
         if current_document:
             payload["current_document"] = current_document
         if real_time:
