@@ -1,20 +1,18 @@
-# glyph/core/workspace/adapters/local.py
+# glyph_forge/core/workspace/adapters/local.py
 from __future__ import annotations
 
-import json
 from typing import Any, Dict, List, Optional
 
-from glyph.core.workspace.runtime.engine import EngineAdapter, EngineIOError, _json_bytes
-from glyph.core.schema_runner.run_schema import GlyphSchemaRunner  
-from glyph.core.analysis.plaintext.intake import intake_plaintext  
-from glyph.core.schema.build_schema import GlyphSchemaBuilder            
-from glyph.core.workspace.storage.base import WorkspaceBase
-import httpx
+from glyph.core.workspace.runtime.engine import EngineAdapter
+from glyph.core.schema_runner.run_schema import GlyphSchemaRunner
+from glyph.core.analysis.plaintext.intake import intake_plaintext
+from glyph.core.schema.build_schema import GlyphSchemaBuilder
+from glyph_forge.core.workspace.storage.base import WorkspaceBase
 
 
 class LocalEngineAdapter(EngineAdapter):
     """
-    Executes everything locally using the SDK’s existing modules.
+    Executes everything locally using the SDK's existing modules.
     """
 
     def __init__(self, workspace: WorkspaceBase):
@@ -27,30 +25,20 @@ class LocalEngineAdapter(EngineAdapter):
         plaintext_path: Optional[str],
         options: Dict
     ) -> Dict:
-        files = {}
-        try:
-            if docx_path:
-                files["docx"] = ("input.docx", open(docx_path, "rb"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-            if plaintext_path:
-                files["plaintext"] = ("input.txt", open(plaintext_path, "rb"), "text/plain")
+        from glyph.core.utils.docx_intake import intake_docx
 
-            # NOTE: Some servers expect multipart for files + data.
-            # If your server expects JSON, change to json=... and move files accordingly.
-            resp = self._client.post(
-                "/schema/build",
-                files=files if files else None,
-                data={"options": json.dumps(options or {})} if files else None,
-                json=( {"options": options or {}} if not files else None ),
-            )
-            resp.raise_for_status()
-            return resp.json()
-        except httpx.RequestError as e:
-            raise EngineIOError(f"Network error during build_schema: {e}") from e
-        finally:
-            for f in files.values():
-                # f is a tuple(file_name, file_obj, mime)
-                if hasattr(f[1], "close"):
-                    f[1].close()
+        if not docx_path:
+            raise ValueError("docx_path is required for local build_schema")
+
+        intake_result = intake_docx(docx_path, self.ws)
+
+        builder = GlyphSchemaBuilder(
+            document_xml_path=str(intake_result.key_files["document_xml"]),
+            docx_extract_dir=str(intake_result.unzip_dir),
+            source_docx=docx_path,
+            tag=getattr(self.ws, "tag", None),
+        )
+        return builder.run(workspace=self.ws)
 
     def run_schema(
         self,
@@ -60,31 +48,8 @@ class LocalEngineAdapter(EngineAdapter):
         plaintext_path: Optional[str],
         options: Dict
     ) -> List:
-        files = {
-            "schema": ("schema.json", _json_bytes(schema), "application/json"),
-        }
-        try:
-            if source_docx:
-                files["docx"] = ("input.docx", open(source_docx, "rb"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-            if plaintext_path:
-                files["plaintext"] = ("input.txt", open(plaintext_path, "rb"), "text/plain")
-
-            resp = self._client.post(
-                "/schema/run",
-                files=files,
-                data={"options": json.dumps(options or {})},
-            )
-            resp.raise_for_status()
-            return resp.json()
-        except httpx.RequestError as e:
-            raise EngineIOError(f"Network error during run_schema: {e}") from e
-        finally:
-            for k, f in list(files.items()):
-                if k == "schema":
-                    continue
-                if hasattr(f[1], "close"):
-                    f[1].close()
-
+        runner = GlyphSchemaRunner(schema)
+        return runner.run(**(options or {}))
 
     def intake_plaintext(
         self,
@@ -92,5 +57,31 @@ class LocalEngineAdapter(EngineAdapter):
         plaintext_path: str,
         options: Dict
     ) -> Dict:
-        # Existing plaintext intake utility
         return intake_plaintext(plaintext_path, **(options or {}))
+
+    def build_glyph(
+        self,
+        *,
+        docx_path: Optional[str],
+        plaintext_path: Optional[str],
+        options: Dict
+    ) -> Dict:
+        from glyph.core.utils.docx_intake import intake_docx
+        from glyph.core.build_glyph import GlyphBuilder
+
+        if not docx_path:
+            raise ValueError("docx_path is required for local build_glyph")
+
+        intake_result = intake_docx(docx_path, self.ws)
+        tag = getattr(self.ws, "tag", None)
+
+        builder = GlyphBuilder(
+            document_xml_path=str(intake_result.key_files["document_xml"]),
+            docx_extract_dir=str(intake_result.unzip_dir),
+            source_docx=docx_path,
+            tag=tag,
+        )
+        result = builder.build(workspace=self.ws)
+        result = builder.save(result, workspace=self.ws, tag=tag)
+
+        return result.to_dict()

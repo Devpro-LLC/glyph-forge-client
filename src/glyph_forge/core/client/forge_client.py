@@ -214,6 +214,125 @@ class ForgeClient:
                 endpoint="/schema/build",
             ) from e
 
+    def build_glyph_from_docx(
+        self,
+        ws: Any,  # Workspace type from glyph.core.workspace
+        *,
+        docx_path: str,
+        save_as: Optional[str] = None,
+        include_artifacts: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Build both schema and markup from a DOCX file in one call.
+
+        Uses the local SDK to intake the DOCX, build the schema via
+        GlyphSchemaBuilder, then produce a .glyph.txt markup file via
+        GlyphMarkupBuilder (coordinated mode, no re-parsing).
+
+        Args:
+            ws: Workspace instance for saving artifacts
+            docx_path: Path to DOCX file (absolute or CWD-relative)
+            save_as: Optional base name to save schema JSON and markup
+                     (e.g. "my_doc" -> my_doc.json + my_doc.glyph.txt)
+            include_artifacts: If True, save tagged DOCX + unzipped files (default: False)
+
+        Returns:
+            Dict with keys:
+            - schema: The generated schema dict
+            - markup: The generated markup string
+            - schema_path: Path to saved schema JSON (if save_as provided)
+            - markup_path: Path to saved markup file (if save_as provided)
+
+        Raises:
+            ForgeClientError: File not found or processing error
+
+        Example:
+            >>> result = client.build_glyph_from_docx(
+            ...     ws,
+            ...     docx_path="sample.docx",
+            ...     save_as="my_schema"
+            ... )
+            >>> print(len(result["markup"]), "chars of markup")
+            >>> print(len(result["schema"].get("pattern_descriptors", [])), "descriptors")
+        """
+        logger.info(f"Building glyph from docx_path={docx_path}, save_as={save_as}")
+
+        # Resolve path to absolute
+        docx_abs = Path(docx_path).resolve()
+
+        if not docx_abs.exists():
+            raise ForgeClientError(
+                f"DOCX file not found: {docx_abs}",
+                endpoint="/glyph/build",
+            )
+
+        if not docx_abs.is_file():
+            raise ForgeClientError(
+                f"Not a file: {docx_abs}",
+                endpoint="/glyph/build",
+            )
+
+        try:
+            from glyph.core.build_glyph import GlyphBuilder
+
+            # Use SDK to intake and extract DOCX
+            intake_result = intake_docx(docx_abs, ws)
+
+            # Get document.xml path
+            document_xml = intake_result.key_files.get("document_xml")
+            if not document_xml:
+                raise ForgeClientError(
+                    f"Failed to extract document.xml from DOCX",
+                    endpoint="/glyph/build",
+                )
+
+            # Build schema + markup using GlyphBuilder
+            builder = GlyphBuilder(
+                document_xml_path=str(document_xml),
+                docx_extract_dir=str(intake_result.unzip_dir),
+                source_docx=str(intake_result.stored_docx_path),
+                tag=ws.tag if hasattr(ws, 'tag') else None,
+            )
+
+            result = builder.build(workspace=ws)
+
+            # Save artifacts if requested
+            schema_path = None
+            markup_path = None
+            if save_as:
+                try:
+                    saved = builder.save(result, workspace=ws)
+                    schema_path = saved.schema_path
+                    markup_path = saved.markup_path
+                    logger.info(f"Schema saved to {schema_path}")
+                    logger.info(f"Markup saved to {markup_path}")
+                except Exception as e:
+                    raise ForgeClientError(
+                        f"Failed to save build artifacts to workspace: {e}",
+                        endpoint="/glyph/build",
+                    ) from e
+
+            logger.info(
+                f"Glyph built successfully: "
+                f"{len(result.schema.get('pattern_descriptors', []))} pattern descriptors, "
+                f"{len(result.markup)} chars of markup"
+            )
+
+            return {
+                "schema": result.schema,
+                "markup": result.markup,
+                "schema_path": schema_path,
+                "markup_path": markup_path,
+            }
+
+        except ForgeClientError:
+            raise
+        except Exception as e:
+            raise ForgeClientError(
+                f"Failed to build glyph: {e}",
+                endpoint="/glyph/build",
+            ) from e
+
     def run_schema(
         self,
         ws: Any,  # Workspace type

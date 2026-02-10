@@ -132,3 +132,32 @@ class ClientEngineAdapter(EngineAdapter):
             return resp.json()
         except httpx.RequestError as e:
             raise EngineIOError(f"Network error during intake_plaintext: {e}") from e
+
+    def build_glyph(
+        self,
+        *,
+        docx_path: Optional[str],
+        plaintext_path: Optional[str],
+        options: Dict
+    ) -> Dict:
+        files = {}
+        try:
+            if docx_path:
+                files["docx"] = ("input.docx", open(docx_path, "rb"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            if plaintext_path:
+                files["plaintext"] = ("input.txt", open(plaintext_path, "rb"), "text/plain")
+
+            resp = self._client.post(
+                "/glyph/build",
+                files=files if files else None,
+                data={"options": json.dumps(options or {})} if files else None,
+                json=({"options": options or {}} if not files else None),
+            )
+            resp.raise_for_status()
+            return resp.json()
+        except httpx.RequestError as e:
+            raise EngineIOError(f"Network error during build_glyph: {e}") from e
+        finally:
+            for f in files.values():
+                if hasattr(f[1], "close"):
+                    f[1].close()
