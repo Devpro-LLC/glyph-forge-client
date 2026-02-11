@@ -1,0 +1,29 @@
+/* Custom CSS for Glyph Forge Documentation */
+
+/* Add any custom styles here */
+
+/* Example: Custom styling for code blocks */
+.highlight {
+    border-radius: 4px;
+}
+
+/* Example: Custom styling for admonitions */
+.admonition {
+    border-radius: 4px;
+}
+
+/* Example: Increase font size for better readability */
+.content {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Example: Custom styling for API reference */
+dl.py.class,
+dl.py.function,
+dl.py.method {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: var(--color-background-secondary);
+    border-radius: 4px;
+}

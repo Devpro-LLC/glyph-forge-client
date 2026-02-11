@@ -1,0 +1,1318 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Basic Usage Examples" href="../examples/basic_usage.html"><link rel="prev" title="Exceptions" href="../api/exceptions.html">
+        <link rel="prefetch" href="../_static/logo-light.png" as="image">
+        <link rel="prefetch" href="../_static/logo-dark.png" as="image">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+        <title>Style Reference - Glyph Forge Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=a7100ea0" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2962ff;
+  --color-brand-content: #2962ff;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #448aff;
+  --color-brand-content: #448aff;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #448aff;
+  --color-brand-content: #448aff;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Glyph Forge Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../_static/logo-light.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../_static/logo-dark.png" alt="Dark Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">Glyph Forge Documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/how_to_use.html">How to Use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/style_reference.html">Style Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/workspace.html">Workspace Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/cli.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/client.html">ForgeClient API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/workspace.html">Workspace API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/exceptions.html">Exceptions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Style Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/basic_usage.html">Basic Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/bulk_processing.html">Bulk Processing Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/compression.html">Schema Compression Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/advanced.html">Advanced Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/images.html">Image Workflow Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Additional Resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/Devpro-LLC/glyph-forge-client/blob/main/docs_sphinx/source/reference/styles.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/Devpro-LLC/glyph-forge-client/edit/main/docs_sphinx/source/reference/styles.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="style-reference">
+<h1>Style Reference<a class="headerlink" href="#style-reference" title="Link to this heading">¶</a></h1>
+<p>The Glyph SDK uses a comprehensive style system for controlling document appearance. Styles are defined in schema pattern descriptors and applied during document generation.</p>
+<section id="style-object-structure">
+<h2>Style Object Structure<a class="headerlink" href="#style-object-structure" title="Link to this heading">¶</a></h2>
+<p>A style object contains properties for fonts, paragraphs, and lists:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;style_id&quot;</span><span class="p">:</span> <span class="s2">&quot;Heading1&quot;</span><span class="p">,</span>           <span class="c1"># Reference to Word style</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>                         <span class="c1"># Font/run-level properties</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;italic&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;underline&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;FF0000&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>                    <span class="c1"># Paragraph-level properties</span>
+        <span class="s2">&quot;alignment&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">240</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="s2">&quot;line_spacing&quot;</span><span class="p">:</span> <span class="mf">1.15</span><span class="p">,</span>
+        <span class="s2">&quot;shading&quot;</span><span class="p">:</span> <span class="s2">&quot;FFFF00&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>                         <span class="c1"># List properties (if applicable)</span>
+        <span class="s2">&quot;numId&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ilvl&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;bullet&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lvlText&quot;</span><span class="p">:</span> <span class="s2">&quot;•&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="font-properties">
+<h2>Font Properties<a class="headerlink" href="#font-properties" title="Link to this heading">¶</a></h2>
+<p>Font properties control text appearance at the run level.</p>
+<section id="basic-font-properties">
+<h3>Basic Font Properties<a class="headerlink" href="#basic-font-properties" title="Link to this heading">¶</a></h3>
+<section id="name">
+<h4>name<a class="headerlink" href="#name" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Font family name</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Supported values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Arial&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Times</span> <span class="pre">New</span> <span class="pre">Roman&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Calibri&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Courier</span> <span class="pre">New&quot;</span></code></p></li>
+<li><p>Any installed system font</p></li>
+</ul>
+</section>
+<section id="size">
+<h4>size<a class="headerlink" href="#size" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<p><strong>Description:</strong> Font size in points</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">10</span></code> - Small text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">11</span></code> - Default body text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">12</span></code> - Standard body text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">14</span></code> - Subheading</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">18</span></code> - Heading</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">24</span></code> - Title</p></li>
+</ul>
+</section>
+</section>
+<section id="text-formatting">
+<h3>Text Formatting<a class="headerlink" href="#text-formatting" title="Link to this heading">¶</a></h3>
+<section id="bold">
+<h4>bold<a class="headerlink" href="#bold" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<p><strong>Description:</strong> Apply bold formatting</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="italic">
+<h4>italic<a class="headerlink" href="#italic" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<p><strong>Description:</strong> Apply italic formatting</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;italic&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="underline">
+<h4>underline<a class="headerlink" href="#underline" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">bool</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Apply underline formatting</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;underline&quot;</span><span class="p">:</span> <span class="kc">True</span>  <span class="c1"># Single underline</span>
+<span class="p">}</span>
+
+<span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;underline&quot;</span><span class="p">:</span> <span class="s2">&quot;double&quot;</span>  <span class="c1"># Double underline</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Supported values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code> - Single underline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code> - No underline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;single&quot;</span></code> - Single underline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;double&quot;</span></code> - Double underline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;thick&quot;</span></code> - Thick underline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;dotted&quot;</span></code> - Dotted underline</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;dash&quot;</span></code> - Dashed underline</p></li>
+</ul>
+</section>
+<section id="strike">
+<h4>strike<a class="headerlink" href="#strike" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<p><strong>Description:</strong> Apply strikethrough formatting</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;strike&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="all-caps">
+<h4>all_caps<a class="headerlink" href="#all-caps" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<p><strong>Description:</strong> Convert text to all uppercase</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;all_caps&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="small-caps">
+<h4>small_caps<a class="headerlink" href="#small-caps" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+<p><strong>Description:</strong> Apply small caps formatting</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;small_caps&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="color-properties">
+<h3>Color Properties<a class="headerlink" href="#color-properties" title="Link to this heading">¶</a></h3>
+<section id="color">
+<h4>color<a class="headerlink" href="#color" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Text color in hexadecimal RGB format</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;FF0000&quot;</span>  <span class="c1"># Red</span>
+<span class="p">}</span>
+
+<span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#0000FF&quot;</span>  <span class="c1"># Blue (# prefix optional)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common colors:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;000000&quot;</span></code> - Black</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;FFFFFF&quot;</span></code> - White</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;FF0000&quot;</span></code> - Red</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;00FF00&quot;</span></code> - Green</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;0000FF&quot;</span></code> - Blue</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;FFFF00&quot;</span></code> - Yellow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;FF00FF&quot;</span></code> - Magenta</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;00FFFF&quot;</span></code> - Cyan</p></li>
+</ul>
+</section>
+<section id="highlight">
+<h4>highlight<a class="headerlink" href="#highlight" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Background highlight color</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;highlight&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Supported values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;yellow&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;brightGreen&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;turquoise&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;pink&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;blue&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;red&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;darkBlue&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;teal&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;green&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;violet&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;darkRed&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;darkYellow&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;gray50&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;gray25&quot;</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="hyperlinks">
+<h3>Hyperlinks<a class="headerlink" href="#hyperlinks" title="Link to this heading">¶</a></h3>
+<section id="hyperlink">
+<h4>hyperlink<a class="headerlink" href="#hyperlink" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> URL for hyperlinked text</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;hyperlink&quot;</span><span class="p">:</span> <span class="s2">&quot;https://example.com&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="paragraph-properties">
+<h2>Paragraph Properties<a class="headerlink" href="#paragraph-properties" title="Link to this heading">¶</a></h2>
+<p>Paragraph properties control block-level formatting.</p>
+<section id="alignment">
+<h3>Alignment<a class="headerlink" href="#alignment" title="Link to this heading">¶</a></h3>
+<section id="id1">
+<h4>alignment<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Horizontal text alignment</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;alignment&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Supported values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code> - Left-aligned (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;center&quot;</span></code> - Center-aligned</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code> - Right-aligned</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;justify&quot;</span></code> - Justified (align both left and right)</p></li>
+</ul>
+</section>
+</section>
+<section id="spacing">
+<h3>Spacing<a class="headerlink" href="#spacing" title="Link to this heading">¶</a></h3>
+<section id="spacing-before">
+<h4>spacing_before<a class="headerlink" href="#spacing-before" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+<p><strong>Description:</strong> Space before paragraph in twips (1/20 of a point)</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">240</span>  <span class="c1"># 12 points (240/20)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> - No spacing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">120</span></code> - 6 points</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">240</span></code> - 12 points (standard)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">480</span></code> - 24 points</p></li>
+</ul>
+</section>
+<section id="spacing-after">
+<h4>spacing_after<a class="headerlink" href="#spacing-after" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+<p><strong>Description:</strong> Space after paragraph in twips</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">120</span>  <span class="c1"># 6 points</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="line-spacing">
+<h4>line_spacing<a class="headerlink" href="#line-spacing" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<p><strong>Description:</strong> Line spacing multiplier</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;line_spacing&quot;</span><span class="p">:</span> <span class="mf">1.5</span>  <span class="c1"># 1.5x line spacing</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code> - Single spacing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1.15</span></code> - Default Word spacing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1.5</span></code> - 1.5 line spacing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2.0</span></code> - Double spacing</p></li>
+</ul>
+</section>
+</section>
+<section id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="Link to this heading">¶</a></h3>
+<section id="left-indent">
+<h4>left_indent<a class="headerlink" href="#left-indent" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+<p><strong>Description:</strong> Left indentation in twips</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;left_indent&quot;</span><span class="p">:</span> <span class="mi">720</span>  <span class="c1"># 0.5 inch (720 twips)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> - No indentation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">360</span></code> - 0.25 inch</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">720</span></code> - 0.5 inch</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1440</span></code> - 1 inch</p></li>
+</ul>
+</section>
+<section id="right-indent">
+<h4>right_indent<a class="headerlink" href="#right-indent" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+<p><strong>Description:</strong> Right indentation in twips</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;right_indent&quot;</span><span class="p">:</span> <span class="mi">720</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="first-line-indent">
+<h4>first_line_indent<a class="headerlink" href="#first-line-indent" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+<p><strong>Description:</strong> First line indentation in twips</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;first_line_indent&quot;</span><span class="p">:</span> <span class="mi">360</span>  <span class="c1"># 0.25 inch</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="visual-effects">
+<h3>Visual Effects<a class="headerlink" href="#visual-effects" title="Link to this heading">¶</a></h3>
+<section id="shading">
+<h4>shading<a class="headerlink" href="#shading" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p><strong>Description:</strong> Background color/shading for paragraph</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;shading&quot;</span><span class="p">:</span> <span class="s2">&quot;FFFF00&quot;</span>  <span class="c1"># Yellow background</span>
+<span class="p">}</span>
+
+<span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;shading&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="s2">&quot;E7E6E6&quot;</span>  <span class="c1"># Light gray</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;FFFF00&quot;</span></code> - Yellow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;E7E6E6&quot;</span></code> - Light gray</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;D9D9D9&quot;</span></code> - Medium gray</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;C0C0C0&quot;</span></code> - Silver</p></li>
+</ul>
+</section>
+<section id="borders">
+<h4>borders<a class="headerlink" href="#borders" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p><strong>Description:</strong> Paragraph borders configuration</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;borders&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;000000&quot;</span><span class="p">,</span>  <span class="c1"># Black</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>          <span class="c1"># 0.75 points</span>
+            <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;single&quot;</span>   <span class="c1"># Line style</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;FF0000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+            <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;double&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Border sides:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;top&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;bottom&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;left&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;right&quot;</span></code></p></li>
+</ul>
+<p><strong>Border properties:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code> - Hex color (required)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code> - Width in eighths of a point (default: 6)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code> - Line style (default: “single”)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">space</span></code> - Space between border and text in points (default: 1)</p></li>
+</ul>
+<p><strong>Border styles:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;single&quot;</span></code> - Single line</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;double&quot;</span></code> - Double line</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;dotted&quot;</span></code> - Dotted line</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;dashed&quot;</span></code> - Dashed line</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;thick&quot;</span></code> - Thick line</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="list-properties">
+<h2>List Properties<a class="headerlink" href="#list-properties" title="Link to this heading">¶</a></h2>
+<p>List properties define numbering and bullet formatting.</p>
+<section id="basic-list-properties">
+<h3>Basic List Properties<a class="headerlink" href="#basic-list-properties" title="Link to this heading">¶</a></h3>
+<section id="numid">
+<h4>numId<a class="headerlink" href="#numid" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Numbering definition ID</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;numId&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="ilvl">
+<h4>ilvl<a class="headerlink" href="#ilvl" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Indentation level (0-8)</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;ilvl&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span>  <span class="c1"># Top level</span>
+<span class="p">}</span>
+
+<span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;ilvl&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>  <span class="c1"># Second level (indented)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Supported values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> - Level 1 (no indent)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> - Level 2</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;2&quot;</span></code> - Level 3</p></li>
+<li><p>up to <code class="docutils literal notranslate"><span class="pre">&quot;8&quot;</span></code> - Level 9</p></li>
+</ul>
+</section>
+<section id="format">
+<h4>format<a class="headerlink" href="#format" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> List format type</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;bullet&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Supported values:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;bullet&quot;</span></code> - Bullet list (•, ○, ▪, etc.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;decimal&quot;</span></code> - Decimal numbers (1, 2, 3…)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;upperRoman&quot;</span></code> - Upper-case Roman numerals (I, II, III…)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;lowerRoman&quot;</span></code> - Lower-case Roman numerals (i, ii, iii…)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;upperLetter&quot;</span></code> - Upper-case letters (A, B, C…)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;lowerLetter&quot;</span></code> - Lower-case letters (a, b, c…)</p></li>
+</ul>
+</section>
+<section id="lvltext">
+<h4>lvlText<a class="headerlink" href="#lvltext" title="Link to this heading">¶</a></h4>
+<p><strong>Type:</strong> <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+<p><strong>Description:</strong> Level text/bullet character</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;lvlText&quot;</span><span class="p">:</span> <span class="s2">&quot;•&quot;</span>      <span class="c1"># Solid bullet</span>
+<span class="p">}</span>
+
+<span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;lvlText&quot;</span><span class="p">:</span> <span class="s2">&quot;%1.&quot;</span>    <span class="c1"># Number with period</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Common bullet characters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;•&quot;</span></code> - Solid bullet</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;○&quot;</span></code> - Hollow bullet</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;▪&quot;</span></code> - Square bullet</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;▫&quot;</span></code> - Hollow square</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;✓&quot;</span></code> - Checkmark</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;➢&quot;</span></code> - Arrow</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="style-resolution">
+<h2>Style Resolution<a class="headerlink" href="#style-resolution" title="Link to this heading">¶</a></h2>
+<p>Styles are resolved with a priority system that merges multiple sources.</p>
+<section id="resolution-order">
+<h3>Resolution Order<a class="headerlink" href="#resolution-order" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Global defaults</strong> - Document-level defaults</p></li>
+<li><p><strong>Style ID</strong> - Reference to Word template style</p></li>
+<li><p><strong>Schema style</strong> - Explicit style from pattern descriptor</p></li>
+<li><p><strong>Inline overrides</strong> - Direct property overrides</p></li>
+</ol>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Global defaults</span>
+<span class="n">global_defaults</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;alignment&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># 2. Style from Word template (via style_id)</span>
+<span class="n">style_id</span> <span class="o">=</span> <span class="s2">&quot;Heading1&quot;</span>  <span class="c1"># Has: font size 16, bold</span>
+
+<span class="c1"># 3. Schema style (overrides)</span>
+<span class="n">schema_style</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;FF0000&quot;</span><span class="p">}</span>  <span class="c1"># Add red color</span>
+<span class="p">}</span>
+
+<span class="c1"># Final resolved style:</span>
+<span class="c1"># {</span>
+<span class="c1">#   &quot;font&quot;: {</span>
+<span class="c1">#     &quot;name&quot;: &quot;Arial&quot;,        # From global defaults</span>
+<span class="c1">#     &quot;size&quot;: 16,             # From style_id (overrides global)</span>
+<span class="c1">#     &quot;bold&quot;: True,           # From style_id</span>
+<span class="c1">#     &quot;color&quot;: &quot;FF0000&quot;       # From schema (highest priority)</span>
+<span class="c1">#   },</span>
+<span class="c1">#   &quot;paragraph&quot;: {</span>
+<span class="c1">#     &quot;alignment&quot;: &quot;left&quot;     # From global defaults</span>
+<span class="c1">#   }</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</section>
+<section id="deep-merging">
+<h3>Deep Merging<a class="headerlink" href="#deep-merging" title="Link to this heading">¶</a></h3>
+<p>Font and paragraph properties are deep-merged:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">override</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;FF0000&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># Result after deep merge:</span>
+<span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>        <span class="c1"># Preserved from base</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>             <span class="c1"># Preserved from base</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>           <span class="c1"># Added from override</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;FF0000&quot;</span>       <span class="c1"># Added from override</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-style-patterns">
+<h2>Common Style Patterns<a class="headerlink" href="#common-style-patterns" title="Link to this heading">¶</a></h2>
+<section id="heading-styles">
+<h3>Heading Styles<a class="headerlink" href="#heading-styles" title="Link to this heading">¶</a></h3>
+<p><strong>Large Bold Heading:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">480</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">240</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Centered Title:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;alignment&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">240</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="body-text-styles">
+<h3>Body Text Styles<a class="headerlink" href="#body-text-styles" title="Link to this heading">¶</a></h3>
+<p><strong>Standard Body:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Times New Roman&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;alignment&quot;</span><span class="p">:</span> <span class="s2">&quot;justify&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;line_spacing&quot;</span><span class="p">:</span> <span class="mf">1.15</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Indented Quote:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;italic&quot;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;left_indent&quot;</span><span class="p">:</span> <span class="mi">720</span><span class="p">,</span>
+        <span class="s2">&quot;right_indent&quot;</span><span class="p">:</span> <span class="mi">720</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="s2">&quot;shading&quot;</span><span class="p">:</span> <span class="s2">&quot;E7E6E6&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="list-styles">
+<h3>List Styles<a class="headerlink" href="#list-styles" title="Link to this heading">¶</a></h3>
+<p><strong>Bullet List:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;numId&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ilvl&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;bullet&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lvlText&quot;</span><span class="p">:</span> <span class="s2">&quot;•&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">60</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Numbered List:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;numId&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ilvl&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lvlText&quot;</span><span class="p">:</span> <span class="s2">&quot;%1.&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">60</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="special-effects">
+<h3>Special Effects<a class="headerlink" href="#special-effects" title="Link to this heading">¶</a></h3>
+<p><strong>Highlighted Text:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;highlight&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Bordered Callout:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;borders&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;0000FF&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;double&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;0000FF&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;double&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;0000FF&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;single&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;0000FF&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;single&quot;</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;shading&quot;</span><span class="p">:</span> <span class="s2">&quot;E7F3FF&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">240</span><span class="p">,</span>
+        <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">240</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-styles-in-schemas">
+<h2>Using Styles in Schemas<a class="headerlink" href="#using-styles-in-schemas" title="Link to this heading">¶</a></h2>
+<section id="pattern-descriptor-example">
+<h3>Pattern Descriptor Example<a class="headerlink" href="#pattern-descriptor-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;H-SHORT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Chapter 1: Introduction&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;style_id&quot;</span><span class="p">:</span> <span class="s2">&quot;Heading1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+            <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;2E74B5&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">480</span><span class="p">,</span>
+            <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">240</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="programmatic-style-creation">
+<h3>Programmatic Style Creation<a class="headerlink" href="#programmatic-style-creation" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_heading_style</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a heading style based on level.&quot;&quot;&quot;</span>
+    <span class="n">sizes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;H-LEVEL-</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">},</span>
+        <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">sizes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+                <span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;paragraph&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;spacing_before&quot;</span><span class="p">:</span> <span class="mi">240</span><span class="p">,</span>
+                <span class="s2">&quot;spacing_after&quot;</span><span class="p">:</span> <span class="mi">120</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="c1"># Usage</span>
+<span class="n">heading</span> <span class="o">=</span> <span class="n">create_heading_style</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Introduction&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="modifying-existing-styles">
+<h3>Modifying Existing Styles<a class="headerlink" href="#modifying-existing-styles" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">glyph.core.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">GlyphSchemaBuilder</span>
+
+<span class="c1"># Build schema</span>
+<span class="n">builder</span> <span class="o">=</span> <span class="n">GlyphSchemaBuilder</span><span class="p">(</span><span class="n">document_xml_path</span><span class="p">,</span> <span class="n">docx_extract_dir</span><span class="p">)</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1"># Modify all headings to be blue</span>
+<span class="k">for</span> <span class="n">descriptor</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;pattern_descriptors&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;H-&quot;</span><span class="p">):</span>
+        <span class="n">descriptor</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;style&quot;</span><span class="p">][</span><span class="s2">&quot;font&quot;</span><span class="p">][</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0000FF&quot;</span>
+
+<span class="c1"># Save modified schema</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;modified_schema.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<section id="consistency">
+<h3>Consistency<a class="headerlink" href="#consistency" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Use style IDs</strong> when possible to maintain consistency with Word templates</p></li>
+<li><p><strong>Define common styles</strong> as constants or configuration</p></li>
+<li><p><strong>Avoid hardcoding</strong> colors and sizes - use variables</p></li>
+</ol>
+</section>
+<section id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Reuse styles</strong> instead of creating unique styles for each element</p></li>
+<li><p><strong>Minimize font changes</strong> within documents</p></li>
+<li><p><strong>Use style_id references</strong> for template-based styles</p></li>
+</ol>
+</section>
+<section id="accessibility">
+<h3>Accessibility<a class="headerlink" href="#accessibility" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Use sufficient contrast</strong> for text colors (e.g., avoid light gray on white)</p></li>
+<li><p><strong>Provide structure</strong> with proper heading levels</p></li>
+<li><p><strong>Use semantic styles</strong> (Heading1, Heading2) instead of just font sizes</p></li>
+</ol>
+</section>
+<section id="maintainability">
+<h3>Maintainability<a class="headerlink" href="#maintainability" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Document custom styles</strong> with comments</p></li>
+<li><p><strong>Extract styles</strong> to separate configuration files</p></li>
+<li><p><strong>Version control</strong> style definitions alongside schemas</p></li>
+</ol>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">¶</a></h3>
+<p><strong>Styles not applying:</strong></p>
+<ul class="simple">
+<li><p>Verify style_id exists in template document</p></li>
+<li><p>Check property names match exactly (case-sensitive)</p></li>
+<li><p>Ensure values are correct type (int vs str)</p></li>
+</ul>
+<p><strong>Fonts not rendering:</strong></p>
+<ul class="simple">
+<li><p>Confirm font is installed on rendering machine</p></li>
+<li><p>Use fallback fonts for cross-platform compatibility</p></li>
+<li><p>Test with common system fonts (Arial, Times New Roman)</p></li>
+</ul>
+<p><strong>Colors not showing:</strong></p>
+<ul class="simple">
+<li><p>Use 6-character hex codes without # prefix</p></li>
+<li><p>Verify color values are strings, not integers</p></li>
+<li><p>Check for “auto” or empty string values</p></li>
+</ul>
+<p><strong>Spacing issues:</strong></p>
+<ul class="simple">
+<li><p>Remember twips are 1/20 of a point</p></li>
+<li><p>Use spacing_before/after, not margin</p></li>
+<li><p>Check line_spacing is a multiplier (1.0, 1.5, 2.0)</p></li>
+</ul>
+</section>
+<section id="debugging-styles">
+<h3>Debugging Styles<a class="headerlink" href="#debugging-styles" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print resolved style for debugging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">glyph.core.schema_runner.resolvers.style_resolver</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_style</span>
+
+<span class="n">descriptor</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;PARAGRAPH&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;bold&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">global_defaults</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">resolved</span> <span class="o">=</span> <span class="n">resolve_style</span><span class="p">(</span><span class="n">descriptor</span><span class="p">,</span> <span class="p">{},</span> <span class="n">global_defaults</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">resolved</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c1"># Output shows merged style with all properties</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../examples/basic_usage.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Basic Usage Examples</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../api/exceptions.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Exceptions</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025, Devpro LLC
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Style Reference</a><ul>
+<li><a class="reference internal" href="#style-object-structure">Style Object Structure</a></li>
+<li><a class="reference internal" href="#font-properties">Font Properties</a><ul>
+<li><a class="reference internal" href="#basic-font-properties">Basic Font Properties</a><ul>
+<li><a class="reference internal" href="#name">name</a></li>
+<li><a class="reference internal" href="#size">size</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#text-formatting">Text Formatting</a><ul>
+<li><a class="reference internal" href="#bold">bold</a></li>
+<li><a class="reference internal" href="#italic">italic</a></li>
+<li><a class="reference internal" href="#underline">underline</a></li>
+<li><a class="reference internal" href="#strike">strike</a></li>
+<li><a class="reference internal" href="#all-caps">all_caps</a></li>
+<li><a class="reference internal" href="#small-caps">small_caps</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#color-properties">Color Properties</a><ul>
+<li><a class="reference internal" href="#color">color</a></li>
+<li><a class="reference internal" href="#highlight">highlight</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hyperlinks">Hyperlinks</a><ul>
+<li><a class="reference internal" href="#hyperlink">hyperlink</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#paragraph-properties">Paragraph Properties</a><ul>
+<li><a class="reference internal" href="#alignment">Alignment</a><ul>
+<li><a class="reference internal" href="#id1">alignment</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spacing">Spacing</a><ul>
+<li><a class="reference internal" href="#spacing-before">spacing_before</a></li>
+<li><a class="reference internal" href="#spacing-after">spacing_after</a></li>
+<li><a class="reference internal" href="#line-spacing">line_spacing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indentation">Indentation</a><ul>
+<li><a class="reference internal" href="#left-indent">left_indent</a></li>
+<li><a class="reference internal" href="#right-indent">right_indent</a></li>
+<li><a class="reference internal" href="#first-line-indent">first_line_indent</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#visual-effects">Visual Effects</a><ul>
+<li><a class="reference internal" href="#shading">shading</a></li>
+<li><a class="reference internal" href="#borders">borders</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#list-properties">List Properties</a><ul>
+<li><a class="reference internal" href="#basic-list-properties">Basic List Properties</a><ul>
+<li><a class="reference internal" href="#numid">numId</a></li>
+<li><a class="reference internal" href="#ilvl">ilvl</a></li>
+<li><a class="reference internal" href="#format">format</a></li>
+<li><a class="reference internal" href="#lvltext">lvlText</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#style-resolution">Style Resolution</a><ul>
+<li><a class="reference internal" href="#resolution-order">Resolution Order</a></li>
+<li><a class="reference internal" href="#deep-merging">Deep Merging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-style-patterns">Common Style Patterns</a><ul>
+<li><a class="reference internal" href="#heading-styles">Heading Styles</a></li>
+<li><a class="reference internal" href="#body-text-styles">Body Text Styles</a></li>
+<li><a class="reference internal" href="#list-styles">List Styles</a></li>
+<li><a class="reference internal" href="#special-effects">Special Effects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-styles-in-schemas">Using Styles in Schemas</a><ul>
+<li><a class="reference internal" href="#pattern-descriptor-example">Pattern Descriptor Example</a></li>
+<li><a class="reference internal" href="#programmatic-style-creation">Programmatic Style Creation</a></li>
+<li><a class="reference internal" href="#modifying-existing-styles">Modifying Existing Styles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#consistency">Consistency</a></li>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+<li><a class="reference internal" href="#accessibility">Accessibility</a></li>
+<li><a class="reference internal" href="#maintainability">Maintainability</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#common-issues">Common Issues</a></li>
+<li><a class="reference internal" href="#debugging-styles">Debugging Styles</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=4ebf8126"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
